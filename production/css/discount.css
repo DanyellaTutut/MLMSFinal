@@ -1,0 +1,62 @@
+
+body{
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 25px;
+	background: #f0f5f5;
+}
+
+#header{
+	background: #b3ffb3;
+	width: 100%;
+	height:  90px;
+}
+
+#headerLogo{
+	height:  80px;
+	width: 700px;
+	margin-left: 10px;
+}
+
+.modal-dialog{
+	width: 80%;
+}
+
+#search{
+	margin-left: 750px;
+	margin-top: 20px;
+}
+
+#datagrid{
+	margin-top: 20px;
+}
+
+#pagination{
+	margin-left: 400px;
+}
+
+#discount{
+	font-weight: normal;
+	font-family: Arial;
+	font-size: 30px;
+}
+
+
+
+
+
+
+
+
+#footer{
+	height: 30px;
+	width: 100%;
+	float: left;
+	background: #b3ffb3;
+	font-family: 'Poiret One', cursive;
+	text-align: center;
+	margin-top: 20px;
+	
+}
+
+
