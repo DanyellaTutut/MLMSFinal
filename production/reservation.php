@@ -63,7 +63,7 @@ if (isset($_POST['btnDeactivate']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Lot Type</title>
+    <title>MLMS-Unit Reservation</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -87,7 +87,7 @@ if (isset($_POST['btnDeactivate']))
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/typeoflot.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
+    <link rel="stylesheet" href="../css/reservation.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
     <script src="../assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
     <script src="../assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
     
@@ -175,7 +175,7 @@ if (isset($_POST['btnDeactivate']))
                   <li style="font-size: 20px"><a><i class="fa fa-briefcase"></i> Transactions <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li class = "divider"></li>
-                      <li><a href="reservation.php" style="font-size: 12px">UNIT RESERVATION</a></li>
+                      <li class = "active"><a href="reservation.php" style="font-size: 12px">UNIT RESERVATION</a></li>
                             <li><a href = "interest.php" style="font-size: 12px">PAYMENT</a></li>
                             <li><a href = "section.php" style="font-size: 12px">CONTRACT</a></li>
                             <li><a href = "block.php" style="font-size: 12px">REQUEST</a></li>
@@ -271,7 +271,7 @@ if (isset($_POST['btnDeactivate']))
                 <div class="panel panel-success ">
                      <div class="panel-heading">
                         
-                         <H2>LOT TYPE</H2>
+                         <H2>UNIT RESERVATION</H2>
                      </div><!-- /.panel-heading -->
                      
                       <div class="panel-body">
@@ -282,7 +282,7 @@ if (isset($_POST['btnDeactivate']))
                       </div><!-- /.panel-heading -->
                          <div class="panel-body">
 
-                       <form class="form-horizontal" role="form" action = "typeoflot.php" method= "post">             
+                       <form class="form-horizontal" role="form" action = "reservation.php" method= "post">             
                                 
                         <div class="form-group" >
                             <div class="col-sm-7">
@@ -290,7 +290,7 @@ if (isset($_POST['btnDeactivate']))
                             </div>
                         </div>
                               
-                        <div class="form-group">
+                      <!--  <div class="form-group">
                             <label class="col-md-4" style = " font-size: 18px;" align="right" style="margin-top:.30em">Lot Type:</label>
                                 <div class="col-md-7">
                                     <input type="text" class="form-control input-md" name= "tfTypeName" required>
@@ -312,12 +312,17 @@ if (isset($_POST['btnDeactivate']))
                                         <input type='text ' class='form-control input-md' name= 'tfSellingPrice' id='tfPriceCreate' required/>
                                     </div>
                                 </div>
-                            </div>
-                                            
+                            </div>-->
+                          <h2>INSERT MAP</h2>
+                               
+                               <div class="checkbox checkbox-success checkbox-inline">
+                                  <input id="atNeedUse" value="atNeed" type="checkbox">
+                                  <label for="atNeed"> For At Need </label>
+                              </div>
                                  <div class="form-group modal-footer"> 
                                 <h5 class="col-md-4" style = "color: red;" align="right" style="margin-top:.30em">REQUIRED ALL FIELDS</h5>
                                 <div class="col-sm-8">
-                  <button type="submit" class="btn btn-success" name= "btnSubmit">Add</button>
+                  <button type="button" class="btn btn-success" name= "btnSubmit" data-toggle = 'modal' title='Edit' data-target = '#popUpWindow'>Proceed</button>
                   <input class = "btn btn-default"  type="reset" name = "btnClear" value = "Clear">
                  </div>
                </div>
@@ -333,18 +338,17 @@ if (isset($_POST['btnDeactivate']))
                                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                           <thead>
                                               <tr>
-                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Lot Type</th>
-                                                  <th class = "success" style = "text-align: center; font-size: 20px;">No. of Lot</th>
-                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Selling Price</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Date</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Customer Name</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Address</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Contact No.</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Type of Unit</th>
                                                   <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>
                                               </tr>
                             </thead>
                                           
                                           <tbody>
-                                              <?php
-                                                  $view = new types();
-                                                  $view->viewTypes();
-                                              ?>
+                                            
                                           </tbody>
                                     </table>
                                 </div><!-- /.table-responsive -->
@@ -487,5 +491,126 @@ if (isset($_POST['btnDeactivate']))
         $('#tfPriceCreate').mask('000000000000.00',{reverse:true});
         $('.tfPriceUpdate').mask('000000000000.00',{reverse:true});
  </script>   
+  
+  <div class = "modal fade" id = "popUpWindow">
+    <div class = "modal-dialog" style = "width:70%; height: 60%; ">
+       <div class = "modal-content">
+         <!--header-->
+          
+          <div class = "modal-header" style="background:#b3ffb3;">
+          <button type = "button" class = "close" data-dismiss = "modal">&times;</button>
+          <h3 class = "modal-title">Reservation Details</h3>
+         </div>
+                        
+         <!--body (form)-->
+         <div class = "modal-body">
+                    
+                          
+           <form class="form-horizontal" role="form" action = "reservation.php" method= "post">             
+                     <div class="form-group" >
+                           <div class="col-sm-8">
+                            <input type="hidden" class="form-control" value="0" name="tfStatus"/>
+                           </div>
+                      </div>
+                      
+                    <div class="row">
+                       <div class=  "col-lg-12">
+                          <div class="panel panel-default">
+                        
+                                <div class="panel-body">
+                                      <div class="row">
+                                          <div class="col-lg-6">
+                                              <form role="form">
+                                                 <div class="form-group">
+                                                  <div class="col-sm-10">
+
+                                                  <legend> Customer Details</legend>      
+
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Last Name:</label>
+                                                    <input type="text" class="form-control input-md" name="tfLastname" placeholder="Last Name"
+                                                            onkeypress="return validateName(event)" maxlength="50" required/>
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>First Name:</label>
+                                                    <input type="text" class="form-control input-md" name="tfFirstName" placeholder="First Name" required
+                                                                 onkeypress="return validateName(event)" maxlength="50"/>
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em">Middle Name:</label>
+                                                    <input type="text" class="form-control input-md" name="tfMiddleName" placeholder="Middle Name" 
+                                                                               onkeypress="return validateName(event)" maxlength="50"/>
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Home Address:</label>
+                                                    <input type="text" class="form-control input-md" name="tfAddress" placeholder="Home Address" required/>
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Contact No:</label>
+                                                    <input type="text" class="form-control input-md" name="tfContact" id="tfContactCreate" placeholder="Contact No." required/>
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Email Address</label>
+                                                    <input type="email" class="form-control input-md" name="tfEmail" id="tfEmailCreate" placeholder="Email Address" required/>
+                                                
+                                                    </div>
+                                                 </div>
+                                                </form>
+                                          </div>
+
+                                            <div class="col-xs-6 col-sm-3">
+                                              <legend> Unit Details</legend>
+                                                    <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Total Amount:</label>
+                                                      <div class="input-group">
+                                                        <span class = 'input-group-addon'>₱</span>
+                                                        <input type="text" class="form-control input-sm" name="tfAmount" id="tfAmountCreate" placeholder="Automatic price from database" required disabled="true" />
+                                                      </div>
+                                             <form name="myform">
+                                               <table>
+                                                 <tr>
+                                                   <td>
+                                                      <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Type of Payment</label>
+                                                                <select class="form-control" id="sel1" name = "typeOfPayment" onchange="showDiv1(this)" required >
+                                                                    <option value = "0">Spotcash</option>
+                                                                    <option value = "1">Installment</option>
+                                                                </select>
+                                                          <script type="text/javascript">
+                                                                function showDiv1(elem){
+                                                                 if(elem.value == 0)
+                                                                      document.getElementById('interest').style.visibility = 'hidden' ;
+                                                                   
+                                                                 else if(elem.value == 1)
+                                                                      document.getElementById('interest').style.visibility = 'visible' ;
+                                                                } 
+                                                         </script>
+                                                      <label style = " font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Amount Paid:</label>
+                                                      <div class="input-group">
+                                                        <span class = 'input-group-addon'>₱</span>
+                                                        <input type="text" class="form-control input-sm" name="tfAmount" id="tfAmountCreate" placeholder="Amount" required />
+                                                      </div>
+
+                                                      <div id="interest" style="visibility:hidden;">
+                                                        <label name="interest" style = "font-size: 14px;" align="right" style="margin-top:.30em"><span style = "color: red; font-size: 14px;">*</span>Term</label>
+
+                                                           <select class="form-control" id="sel1" name = "interestrate" required>
+                                                              <option value = "db">Kunin sa database</option>
+                                                           </select>
+                                                          <h2> COMPUTATION?</h2>
+                                                  </div>
+
+                                                    </td>
+                                                  </tr>
+                                              </table>
+                                          </form>
+                                            
+
+                                                            
+
+
+                                                             
+                                        </div>
+
+                            </div>
+                           </div> <!--PANEL BODY-->
+
+                     <div class="form-group modal-footer"> 
+                                <h5 class="col-md-4" style = "color: red;" align="right" style="margin-top:.30em">(*) REQUIRED FIELDS</h5>
+                                <div class="col-sm-8">
+                  <button type="submit" class="btn btn-success" name= "btnSubmit">Submit</button>
+                  <input class = "btn btn-default"  type="reset" name = "btnClear" value = "Clear">
+                 </div>
+               </div>
+                 
+              </div>
+              </div>
   </body>
 </html>

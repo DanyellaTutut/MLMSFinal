@@ -1848,6 +1848,8 @@ class discount{
     }//function selectService()
 	
 }//class discount
-    
+   
+//TRANSACTION
+// _________________________________________________________________________________
 
 ?>   

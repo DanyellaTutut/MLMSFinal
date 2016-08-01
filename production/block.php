@@ -186,19 +186,12 @@ if (isset($_POST['btnDeactivate']))
                     </ul>
                   </li>
                   <li style="font-size: 20px"><a><i class="fa fa-briefcase"></i> Transactions <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li class = "dropdown-header" style="font-size: 12px;">RESERVATION</li>
-                            <li><a href = "lotReservation.php" style="text-align: right; font-size: 12px;">LOT-UNIT</a></li>
-                            <li><a href = "acReservation.php" style="text-align: right; font-size: 12px;">AC-UNIT</a></li>
-                            <li class = "divider"></li>
-                            
-                            <li class="dropdown-header" style="font-size: 12px;">PAYMENT</li>
-                            <li><a href = "spotcash.php" style="text-align: right; font-size: 12px;">SPOTCASH</a></li>
-                            <li><a href = "installment.php" style="text-align: right; font-size: 12px;">INSTALLMENT</a></li>
-                            <li class = "divider"></li>
-                            
-                            <li><a href = "contract.php" style = "font-size: 12px;">CONTRACT</a></li>
-                            <li><a href = "request.php" style = "font-size: 12px;">REQUEST</a></li>
+                   <ul class="nav child_menu">
+                      <li class = "divider"></li>
+                      <li><a href="reservation.php" style="font-size: 12px">UNIT RESERVATION</a></li>
+                            <li><a href = "interest.php" style="font-size: 12px">PAYMENT</a></li>
+                            <li><a href = "section.php" style="font-size: 12px">CONTRACT</a></li>
+                            <li><a href = "block.php" style="font-size: 12px">REQUEST</a></li>
                     </ul>
                   </li>
                   <li style="font-size: 20px"><a><i class="fa fa-list"></i> Queries <span class="fa fa-chevron-down"></span></a>
