@@ -197,6 +197,10 @@ if (isset($_POST['btnDeactivate']))
         <!-- top navigation -->
         <div class="top_nav" >
           <div class="nav_menu" style="background-color:#ABEBC6;">
+          <a class="navbar-brand" rel="home" href="#" >
+        <img style="max-width:800px; margin-top: -16px; margin-left: -15px"
+             src="images/logo2.png">
+                   </a>
 
             <nav>
               <ul class="nav navbar-nav navbar-right">
