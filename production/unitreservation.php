@@ -9,27 +9,33 @@
 		<!-- END META -->
          
 		<title>MLMS-Unit Reservation</title>
-		<link type="text/css" rel="stylesheet" href="assets/css/theme-default/bootstrap.css" />
-		<link type="text/css" rel="stylesheet" href="assets/css/theme-default/font-awesome.min.css" />
-		<link type="text/css" rel="stylesheet" href="assets/css/theme-default/material-design-iconic-font.min.css" />
-        <link type="text/css" rel="stylesheet" href="assets/css/theme-default/libs/DataTables/jquery.dataTables.css" />
-        <link type="text/css" rel="stylesheet" href="assets/css/theme-default/libs/DataTables/extensions/dataTables.colVis.css" />
-        <link type="text/css" rel="stylesheet" href="assets/css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css" />
-        
-		<link rel="stylesheet" href="css/reservation.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
 		
-		<script src="assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
-		<script src="assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
-		<script src="assets/js/libs/bootstrap/bootstrap.min.js"></script>
-        <script src="assets/js/libs/spin.js/spin.min.js"></script>
-		<script src="assets/js/libs/autosize/jquery.autosize.min.js"></script>
-        <script src="assets/js/libs/mask/jquery.mask.min.js"></script>
 
-        
-		<script src="assets/js/libs/DataTables/jquery.dataTables.min.js"></script>
-        <script src="assets/js/libs/DataTables/extensions/ColVis/js/dataTables.colVis.min.js"></script>
-		<script src="assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
-        
+<!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- jQuery custom content scroller -->
+    <link href="../vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet"/>
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+
+
+    <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/font-awesome.min.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/material-design-iconic-font.min.css" />
+  <!-- Datatables -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+
+
+
         <script>
             function validateName(evt) {
                     evt = (evt) ? evt : window.event;
@@ -41,13 +47,7 @@
                     }
                 }
         </script>
-         <script type="text/javascript">
-            $(document).ready(function(){
-                $('#datatables-reserve').DataTable();
-                
-            });
-        </script>
-
+         
 
 
   </head>

@@ -85,18 +85,6 @@ if (isset($_POST['btnDeactivate']))
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/ashcrypt.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
-    <script src="../assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
-    <script src="../assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
-    
-    <script src="../assets/js/libs/spin.js/spin.min.js"></script>
-    <script src="../assets/js/libs/autosize/jquery.autosize.min.js"></script>
-    <script src="../assets/js/libs/mask/jquery.mask.min.js"></script>
-        
-    <script src="../assets/js/libs/DataTables/jquery.dataTables.min.js"></script>
-    <script src="../assets/js/libs/DataTables/extensions/ColVis/js/dataTables.colVis.min.js"></script>
-    <script src="../assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
-
 
 
         <script>
@@ -290,7 +278,7 @@ if (isset($_POST['btnDeactivate']))
                      
                       						<div class="panel-body">
                       				<form class="form-horizontal" role="form" action = "ashcrypt.php" method= "post">							  
-							<div class="form-group" >
+							                   <div class="form-group" >
                                   <div class="col-sm-8">
                                       <input type="hidden" class="form-control" value="0" name="tfStatus"/>
                                   </div>
@@ -322,7 +310,7 @@ if (isset($_POST['btnDeactivate']))
 
                       						</div>
                       				</div>
-                      			</div>
+                      			</div><!--sub column md-4-->
                           
                            
                           

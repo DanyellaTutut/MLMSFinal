@@ -90,18 +90,6 @@ if (isset($_POST['btnDeactivate']))
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/interestForLevel.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
-    <script src="../assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
-    <script src="../assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
-    
-    <script src="../assets/js/libs/spin.js/spin.min.js"></script>
-    <script src="../assets/js/libs/autosize/jquery.autosize.min.js"></script>
-    <script src="../assets/js/libs/mask/jquery.mask.min.js"></script>
-        
-    <script src="../assets/js/libs/DataTables/jquery.dataTables.min.js"></script>
-    <script src="../assets/js/libs/DataTables/extensions/ColVis/js/dataTables.colVis.min.js"></script>
-    <script src="../assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
-
  
         <script>
             function validateNumber(evt) {
@@ -177,9 +165,9 @@ if (isset($_POST['btnDeactivate']))
                    <ul class="nav child_menu">
                       <li class = "divider"></li>
                       <li><a href="reservation.php" style="font-size: 12px">UNIT RESERVATION</a></li>
-                            <li><a href = "interest.php" style="font-size: 12px">PAYMENT</a></li>
-                            <li><a href = "section.php" style="font-size: 12px">CONTRACT</a></li>
-                            <li><a href = "block.php" style="font-size: 12px">REQUEST</a></li>
+                           <li><a href = "#" style="font-size: 12px">PAYMENT</a></li>
+                            <li><a href = "#" style="font-size: 12px">CONTRACT</a></li>
+                            <li><a href = "#" style="font-size: 12px">REQUEST</a></li>
                     </ul>
                   </li>
                   <li style="font-size: 20px"><a><i class="fa fa-list"></i> Queries <span class="fa fa-chevron-down"></span></a>
