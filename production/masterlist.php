@@ -1,47 +1,52 @@
 <?php
 
-require('controller/connection.php');
+require ("controller/connection.php");
 require('controller/viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
 
+
+
 if (isset($_POST['btnSubmit']))
       {
 
     //echo "Record sucessfully saved";
-    //$tfSectionID = $_POST['tfSectionID'];
-    $tfSectionName = $_POST['tfSectionName'];
-    $tfNoOfBlock = $_POST['tfNoOfBlock'];
-        $tfStatus = $_POST['tfStatus'];
-        
-    $createsec =  new createSection();
-    $createsec->Create($tfSectionName,$tfNoOfBlock,$tfStatus);
+    $tfTypeName = $_POST['tfTypeName'];
+    $tfNoOfLot = $_POST['tfNoOfLot'];
+    $tfSellingPrice = $_POST['tfSellingPrice'];
+    $tfStatus = $_POST['tfStatus'];
+    
+    
+    $createtypes =  new createTypes();
+    $createtypes->Create($tfTypeName,$tfNoOfLot,$tfSellingPrice,$tfStatus);
       }
-
+    
 if (isset($_POST['btnSave']))
       {
 
     //echo "Record sucessfully saved";
-    $tfSectionID = $_POST['tfSectionID'];
-    $tfSectionName = $_POST['tfSectionName'];
-    $tfNoOfBlock = $_POST['tfNoOfBlock'];
-        //$status = $_POST['status'];
+    $tfTypeID = $_POST['tfTypeID'];
+    $tfTypeName = $_POST['tfTypeName'];
+    $tfNoOfLot = $_POST['tfNoOfLot'];
+    $tfSellingPrice = $_POST['tfSellingPrice'];
     
-    $updatesec =  new updateSection();
-    $updatesec->update($tfSectionID,$tfSectionName,$tfNoOfBlock);
+    
+    
+    $updatetype =  new updateType();
+    $updatetype->update($tfTypeID,$tfTypeName,$tfNoOfLot,$tfSellingPrice);
       }
-
+      
 if (isset($_POST['btnDeactivate']))
       {
 
     //echo "Record sucessfully saved";
-    $tfSectionID = $_POST['tfSectionID'];
+    $tfTypeID = $_POST['tfTypeID'];
     
     //$status = $_POST['status'];
     
-    $deactivatesec =  new deactivateSection();
-    $deactivatesec->deactivate($tfSectionID);
+    $deactivateType =  new deactivateType();
+    $deactivateType->deactivate($tfTypeID);
       }
 
 
@@ -58,7 +63,7 @@ if (isset($_POST['btnDeactivate']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Home</title>
+    <title>MLMS-MASTERLIST</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -75,11 +80,14 @@ if (isset($_POST['btnDeactivate']))
 
     <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/font-awesome.min.css" />
     <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/material-design-iconic-font.min.css" />
-    <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/libs/DataTables/jquery.dataTables.css" />
-    <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/libs/DataTables/extensions/dataTables.colVis.css" />
-    <link type="text/css" rel="stylesheet" href="../assets/css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css" />
+    <!-- Datatables -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/section.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
+    <link rel="stylesheet" href="../css/reservation.css" media="screen" title="Cascading Styles Sheet" charset="utf-8">
     <script src="../assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
     <script src="../assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
     
@@ -92,12 +100,7 @@ if (isset($_POST['btnDeactivate']))
     <script src="../assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 
 
-    <script type="text/javascript">
-            $(document).ready(function(){
-                $('#datatables-section').DataTable();
-                
-            });
-        </script>
+
         
         <script>
             function validateNumber(evt) {
@@ -109,18 +112,8 @@ if (isset($_POST['btnDeactivate']))
                     return false;
                     }
                 }
-                
-              function validateSectionName(evt) {
-                    evt = (evt) ? evt : window.event;
-                    var charCode = (evt.which) ? evt.which : evt.keyCode;
-                    if (charCode == 8 || charCode == 32 || (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)){
-                    return true;
-                    }else{
-                    return false;
-                    }
-                }
             
-        </script>
+        </script>   
   </head>
 
   <body class="nav-md">
@@ -163,8 +156,8 @@ if (isset($_POST['btnDeactivate']))
                     <ul class="nav child_menu">
                     <li class = "divider"></li>
                       <li><a href="typeoflot.php" style="font-size: 12px">LOT TYPE</a></li>
-                      <li><a href = "interest.php" style="font-size: 12px">INTEREST RATE</a></li>
-                      <li class = "active"><a  href = "section.php" style="font-size: 12px">SECTION</a></li>
+                            <li><a href = "interest.php" style="font-size: 12px">INTEREST RATE</a></li>
+                            <li><a href = "section.php" style="font-size: 12px">SECTION</a></li>
                             <li><a href = "block.php" style="font-size: 12px">BLOCK</a></li>
                             <li><a href = "lot.php" style="font-size: 12px">LOT-UNIT</a></li>
                             
@@ -181,23 +174,17 @@ if (isset($_POST['btnDeactivate']))
                   </li>
                   <li style="font-size: 20px"><a><i class="fa fa-briefcase"></i> Transactions <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li class = "dropdown-header" style="font-size: 12px;">RESERVATION</li>
-                            <li><a href = "lotReservation.php" style="text-align: right; font-size: 12px;">LOT-UNIT</a></li>
-                            <li><a href = "acReservation.php" style="text-align: right; font-size: 12px;">AC-UNIT</a></li>
-                            <li class = "divider"></li>
-                            
-                            <li class="dropdown-header" style="font-size: 12px;">PAYMENT</li>
-                            <li><a href = "spotcash.php" style="text-align: right; font-size: 12px;">SPOTCASH</a></li>
-                            <li><a href = "installment.php" style="text-align: right; font-size: 12px;">INSTALLMENT</a></li>
-                            <li class = "divider"></li>
-                            
-                            <li><a href = "contract.php" style = "font-size: 12px;">CONTRACT</a></li>
-                            <li><a href = "request.php" style = "font-size: 12px;">REQUEST</a></li>
+                      <li class = "divider"></li>
+                      <li class = "active"><a href="reservation.php" style="font-size: 12px">UNIT RESERVATION</a></li>
+                            <li><a href = "interest.php" style="font-size: 12px">PAYMENT</a></li>
+                            <li><a href = "section.php" style="font-size: 12px">CONTRACT</a></li>
+                            <li><a href = "block.php" style="font-size: 12px">REQUEST</a></li>
                     </ul>
                   </li>
-                  <li style="font-size: 20px"><a><i class="fa fa-list"></i> Queries <span class="fa fa-chevron-down"></span></a>
+                  <li class = "active" style="font-size: 20px"><a><i class="fa fa-list"></i> Queries <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href = "masterlist.php">MASTER LIST</a></li>
+
+                      <li class = "active"><a href = "masterlist.php">MASTERLIST</a></li>
                       <li><a href = "unitavailability.php">UNIT AVAILABILITY</a></li>
                       <li><a href = "intermentschedule.php">INTERMENT SCHEDULE</a></li>
                       
@@ -281,8 +268,42 @@ if (isset($_POST['btnDeactivate']))
 
         <!-- page content -->
         <div class="right_col" role="main">
-       
-      </div>
+
+          <div class = "row">
+            <div class="col-md-12">
+                <div class="panel panel-success ">
+                     <div class="panel-heading">
+                        
+                         <H2>MASTERLIST</H2>
+                     </div><!-- /.panel-heading -->
+                     
+                     <div class="table-responsive">
+                                       <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                          <thead>
+                                              <tr>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Section</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Block</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Lot Type</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Customer's Name</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">Mode of Payment</th>
+                                                  <th class = "success" style = "text-align: center; font-size: 20px;">No. of Deceased</th>
+
+                                                 
+                            </thead>
+                                          
+                                          <tbody>
+                                            
+                                          </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                         
+              </div>
+              
+            </div><!--panel body 2-->
+          </div>
+       </div><!--sub column 2-->
+      </div><!--Main Panel Body-->
+      </div>  <!-- /page content -->
             </div>
           </div>
         </div>
@@ -311,5 +332,112 @@ if (isset($_POST['btnDeactivate']))
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>
+    <script src="../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+
+     <!-- Datatables -->
+    
+    <script>
+      $(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        $('#datatable').dataTable();
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive').DataTable();
+
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+        TableManageButtons.init();
+      });
+    </script>
+    <!-- /Datatables -->
+
+     <script>
+        $('#tfPriceCreate').mask('000000000000.00',{reverse:true});
+        $('.tfPriceUpdate').mask('000000000000.00',{reverse:true});
+ </script>   
   </body>
 </html>
+  
