@@ -55,7 +55,20 @@
 
                     <li style="font-size: 20px"><a><i class="fa fa-list"></i> Queries <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href = "masterlist.php">MASTER LIST</a></li>
+                             <li class = "divider"></li>
+                             <li><a href = "lot-type-query.php">LOT TYPE</a></li>
+                             <li><a href = "interest-rate-lot-query.php">INTEREST RATE</a></li>
+                             <li><a href = "section-query.php">SECTION</a></li>
+                             <li><a href = "block-query.php">BLOCK</a></li>
+                             <li><a href = "lot-query.php">LOT</a></li>
+                             <li class = "divider"></li>
+                             <li><a href = "ashcrypt-bldg-query.php">ASH CRYPT</a></li>
+                             <li><a href = "ashcrypt-level-query.php">LEVEL</a></li>
+                             <li><a href = "interest-rate-level-query.php">INTEREST RATE</a></li>
+                             <li><a href = "ashcrypt-unit-query.php">ASH CRYPT UNIT</a></li>
+                            <li class = "divider"></li>
+                            <li><a href = "service-query.php">SERVICE</a></li>
+                            <li><a href = "discount-query.php">DISCOUNT</a></li>
                         </ul>
                     </li>
                     

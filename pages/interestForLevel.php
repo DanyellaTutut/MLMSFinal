@@ -5,14 +5,12 @@ require('controller/viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
+require('controller/archivedata.php');
+require('controller/retrieve.php');
 
 
+if (isset($_POST['btnSubmit'])){
 
-if (isset($_POST['btnSubmit']))
-      {
-
-		//echo "Record sucessfully saved";
-		
         $level = $_POST['level'];
 		$tfNoOfYear = $_POST['tfNoOfYear'];
         $tfPercent = $_POST['tfPercent'];
@@ -24,14 +22,12 @@ if (isset($_POST['btnSubmit']))
         
 		$createInterest =  new createInterestForLevel();
 		$createInterest->Create($atNeed,$level,$tfNoOfYear,$tfPercentValue,$tfStatus);
-      }
+}
 		
 
 	  
-if (isset($_POST['btnSave']))
-      {
+if (isset($_POST['btnSave'])){
 
-		//echo "Record sucessfully saved";
 		$tfInterestID = $_POST['tfInterestID'];
         $level = $_POST['level'];
 		$tfNoOfYear = $_POST['tfNoOfYear'];
@@ -41,20 +37,23 @@ if (isset($_POST['btnSave']))
 		
         $updateInterest =  new updateInterestForLevel();
 		$updateInterest->update($tfInterestID,$level,$tfNoOfYear,$tfPercentValue);
-      }
+}
       
-if (isset($_POST['btnDeactivate']))
-      {
+if (isset($_POST['btnDeactivate'])) {
 
-		//echo "Record sucessfully saved";
 		$tfInterestID = $_POST['tfInterestID'];
 		
-		
-		$deactivateInterest =  new deactivateInterest();
-		$deactivateInterest->deactivate($tfInterestID);
-      }
+		$deactivateLevelInterest =  new deactivateLevelInterest();
+		$deactivateLevelInterest->deactivate($tfInterestID);
+}
 
+if (isset($_POST['btnArchive'])){
 
+        $tfInterestID = $_POST['tfInterestID'];
+        
+        $archiveLevelInterest =  new archiveLevelInterest();
+        $archiveLevelInterest->archive($tfInterestID);
+}
 	  
 ?>
 
@@ -181,7 +180,17 @@ if (isset($_POST['btnDeactivate']))
                             </div><!--col-md-4 column-->
                    
                             <div class="col-md-8">
-                                <div class="panel panel-success ">
+                                 <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <form class="form-vertical" role="form" action = "interestForLevel.php" method= "post">
+                                                    <div class="col-md-5">
+                                                        <h4><b>Show Terminated Interest Rate?</b></h4>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                    <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                </form>
+                     	                  </div><!-- /.panel-heading -->
+                                           
                                     <div class="panel-body">       
                                         <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                             <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
@@ -197,9 +206,22 @@ if (isset($_POST['btnDeactivate']))
                                                     
                                                     <tbody>
                                                         <?php
-                                                            $view = new interestForLevel();
-                                                            $view->viewInterest();
-                                                        ?>
+                                                            
+                                                              if (isset($_POST['btnGo'])){
+                                                                    $viewDeactivate = new deactivatedInterestForLevel();
+                                                                    $viewDeactivate->viewDeactivatedInterestForLevel();
+                                                              }
+                                                              else if(isset($_POST['btnBack'])){
+                                                                    $view = new interestForLevel();
+                                                                    $view->viewInterest();
+                                                              }
+                                                              else{
+                                                                    $view1 = new interestForLevel();
+                                                                    $view1->viewInterest();
+                                                              }
+                                                              
+                                                             ?>
+                                                       
                                                     </tbody>
                                             </table>
                                         </div><!-- /.table-responsive -->

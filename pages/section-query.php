@@ -5,8 +5,6 @@ require('controller/viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
-require('controller/archivedata.php');
-require('controller/retrieve.php');
 
 if (isset($_POST['btnSubmit']))
       {
@@ -34,7 +32,8 @@ if (isset($_POST['btnSave']))
     $updatesec->update($tfSectionID,$tfSectionName,$tfNoOfBlock);
       }
 
-if (isset($_POST['btnDeactivate'])) {
+if (isset($_POST['btnDeactivate']))
+      {
 
     //echo "Record sucessfully saved";
     $tfSectionID = $_POST['tfSectionID'];
@@ -43,18 +42,9 @@ if (isset($_POST['btnDeactivate'])) {
     
     $deactivatesec =  new deactivateSection();
     $deactivatesec->deactivate($tfSectionID);
-}
+      }
 
-if (isset($_POST['btnArchive'])){
 
-    //echo "Record sucessfully saved";
-    $tfSectionID = $_POST['tfSectionID'];
-    
-    //$status = $_POST['status'];
-    
-    $archiveSection =  new archiveSection();
-    $archiveSection->archive($tfSectionID);
-}
     
 ?>
 
@@ -131,94 +121,28 @@ if (isset($_POST['btnArchive'])){
                             </div><!-- /.panel-heading -->
                                     
                             <div class="panel-body">
-                                <div class="col-md-4">
-                                    <div class="panel panel-success ">
-                                        <div class="panel-heading">
-                                            <H3><b>Create New</b></H3>
-                                        </div><!-- /.panel-heading -->
-                                    
-                                        <div class="panel-body">
-                                            <form class="form-horizontal"   role="form" action = "section.php" method= "POST">
-                                                                
-                                                    <div class="form-group" >
-                                                        <div class="col-sm-8">
-                                                            <input type="hidden" class="form-control" value="0" name="tfStatus"/>
-                                                        </div>
-                                                    </div>
-                                                                                
-                                                    <div class="form-group">
-                                                        <label class="col-md-5" style = " font-size: 18px;" align="right" style="margin-top:.30em">Section:</label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control input-md" name= "tfSectionName" onkeypress='return validateSectionName(event)' required>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="form-group" >
-                                                        <label class="col-md-5" style = " font-size: 18px;" align="right" style="margin-top:.30em">No. of Block:</label>
-                                                        <div class="col-md-7">
-                                                            <input type="number" class="form-control input-md" min="1" name="tfNoOfBlock" onkeypress='return validateNumber(event)' required/>
-                                                        </div>
-                                                    </div>
-                                                                            
-                                                    <div class="form-group modal-footer"> 
-                                                        <div class="col-md-12 col-md-offset-4">
-                                                            <button type="submit" class="btn btn-success col-md-3" name= "btnSubmit">Add</button>
-                                                            <input class = "btn btn-default col-md-5" type="reset" name = "btnClear" value = "Clear Entries">
-                                                        </div>
-                                                        <h4 class="col-md-12" style = "color: red;" align="left" style="margin-top:.30em">REQUIRED ALL FIELDS</h4>
-                                                    </div>
-                                                    
-                                                </form><!--Form-->
-                                            </div><!-- panel body -->
-                                        </div><!--panel panel-success-->
-                                    </div><!--col-md-4 column-->
-
-                                <div class="col-md-8">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <form class="form-vertical" role="form" action = "section.php" method= "post">
-                                                    <div class="col-md-5">
-                                                        <h4><b>Show Terminated Section?</b></h4>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
-                                                    <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
-                                                </form>
-                     	                  </div><!-- /.panel-heading -->
-                                           
-                                        <div class="panel-body">    		
+                                   <div class="panel-body">        
                                             <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                     <thead>
                                                             <tr>
                                                                 <th class="success" style = "text-align:center; font-size: 20px;">Name</th>
                                                                 <th class="success" style = "text-align:center; font-size: 20px;">No. of Block</th>
-                                                                <th class="success" style = "text-align:center; font-size: 20px;">Action</th>
+                                                               
                                                             </tr>
                                                     </thead>                  
                                                     
                                                     <tbody>
-                                                        <?php
-                                                              if (isset($_POST['btnGo'])){
-                                                                    $viewDeactivate = new deactivatedSection();
-                                                                    $viewDeactivate->viewDeactivatedSection();
-                                                              }
-                                                              else if(isset($_POST['btnBack'])){
-                                                                    $view = new section();
-                                                                    $view->viewSection();
-                                                              }
-                                                              else{
-                                                                  $view1 = new section();
-                                                                  $view1->viewSection();
-                                                              }
-                                                              
-                                                        ?>
-                                                           
+                                                            <?php
+                                                                $view = new section();
+                                                                $view->viewSectionQuery();
+                                                            ?>
                                                     </tbody>
                                             </table>
                                         </div><!-- /.table-responsive -->
                                     </div><!--panel body -->
-                                </div><!--panel panel-success-->
-                            </div><!--col-md-8-->   
+                         
+                             
 
                         </div><!--panel body -->
                     </div><!--panel panel-success-->

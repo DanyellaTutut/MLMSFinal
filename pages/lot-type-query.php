@@ -5,8 +5,6 @@ require('controller/viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
-require('controller/archivedata.php');
-require('controller/retrieve.php');
 
 
 
@@ -51,17 +49,7 @@ if (isset($_POST['btnDeactivate']))
     $deactivateType->deactivate($tfTypeID);
       }
 
-if (isset($_POST['btnArchive']))
-      {
 
-    //echo "Record sucessfully saved";
-    $tfTypeID = $_POST['tfTypeID'];
-    
-    //$status = $_POST['status'];
-    
-    $archiveType =  new archiveType();
-    $archiveType->archive($tfTypeID);
-}
     
 ?>
 
@@ -128,107 +116,27 @@ if (isset($_POST['btnArchive']))
             
                              <!-- panel-body -->   
                             <div class="panel-body">
-                                <div class="col-md-4">
-                                    <div class="panel panel-success ">
-                                        <div class="panel-heading">
-                                            <H3><b>Create New</b></H3>
-                     	                </div><!-- /.panel-heading -->
-                         
-                                        <!-- panel-body --> 
-                                        <div class="panel-body">
-                                            <form class="form-horizontal" role="form" action = "typeoflot.php" method= "post">						  
-                                                  <div class="form-group" >
-                                                       <div class="col-sm-7">
-                                                            <input type="hidden" class="form-control" value="0" name="tfStatus"/>
-                                                        </div>
-                                                     </div>
-                              
-                                                    <div class="form-group">
-                                                        <label class="col-md-5" style = " font-size: 18px;" align="right" style="margin-top:.30em">Lot Type:</label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control input-md" name= "tfTypeName" required>
-                                                        </div>
-                                                    </div>
-														  
-                                                    <div class="form-group" >
-                                                        <label class="col-md-5" style = " font-size: 18px;" align="right" style="margin-top:.30em">No. of Lot:</label>
-                                                        <div class="col-md-7">
-                                                            <input type="number" class="form-control input-md" min="1" name="tfNoOfLot" onkeypress="return validateNumber(event)" required/>
-                                                        </div>
-                                                    </div>
-														  
-                                                    <div class='form-group'>
-                                                        <label class="col-md-5" style = " font-size: 18px;" align="right" style="margin-top:.30em">Selling Price:</label>
-                                                        <div class="col-md-7">  
-                                                            <div class='input-group'>
-                                                                <span class = 'input-group-addon'>₱</span>
-                                                                <input type='text' class='form-control input-md' name= 'tfSellingPrice' id='tfSellingPrice' onkeypress="return validateNumber(event)" required/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-							                              
-                                                    <div class="form-group modal-footer"> 
-                                                        <div class="col-md-12 col-md-offset-4">
-                                                            <button type="submit" class="btn btn-success col-md-3" name= "btnSubmit">Add</button>
-                                                            <input class = "btn btn-default col-md-5" type="reset" name = "btnClear" value = "Clear Entries">
-                                                        </div>
-                                                        <h4 class="col-md-12" style = "color: red;" align="left" style="margin-top:.30em">REQUIRED ALL FIELDS</h4>
-                                                    </div>
-														  
-                                            </form><!--Form-->
-                                        </div><!-- panel body -->
-                                    </div><!--panel panel-success-->
-                                </div><!--col-md-4 column-->
-
-                                <div class="col-md-8">
-                                    <div class="panel panel-default">
-                                         <div class="panel-heading">
-                                            <form class="form-vertical" role="form" action = "typeoflot.php" method= "post">
-                                                    <div class="col-md-5">
-                                                        <h4><b>Show Terminated Lot Type?</b></h4>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
-                                                    <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
-                                                </form>
-                     	                  </div><!-- /.panel-heading -->
-                                         
-                                          <div class="panel-body">
-                                              <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
-                                                   <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                             
+                                                <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                    <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Lot Type</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">No. of Lot</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Selling Price</th>
-                                                                <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>
+                                                               
                                                             </tr>
                                                         </thead>
                                           
                                                         <tbody>
                                                             <?php
-                                                              if (isset($_POST['btnGo'])){
-                                                                    $viewDeactivate = new deactivatedTypes();
-                                                                    $viewDeactivate->viewDeactivatedTypes();
-                                                              }
-                                                              else if(isset($_POST['btnBack'])){
-                                                                    $view = new types();
-                                                                    $view->viewTypes();
-                                                              }
-                                                              else{
-                                                                  $view1 = new types();
-                                                                  $view1->viewTypes();
-                                                              }
-                                                              
-                                                              
+                                                                $view = new types();
+                                                                $view->viewTypesQuery();
                                                             ?>
                                                         </tbody>
                                                     </table>
                                                 </div><!-- /.table-responsive -->
                          
-                                            </div><!--panel body -->
-                                        </div><!--panel panel-success-->
-                                    </div><!--col-md-8-->
-                
                                 </div><!--panel body -->
                             </div><!--panel panel-success-->
                         </div><!--col-md-12-->

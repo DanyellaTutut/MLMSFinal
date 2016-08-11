@@ -5,54 +5,69 @@ require('controller/viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
+require('controller/archivedata.php');
+require('controller/retrieve.php');
 
 
 
-if (isset($_POST['btnSubmit']))
-      {
-
-    //echo "Record sucessfully saved";
-    $tfBlockName = $_POST['tfBlockName'];
-    $typeBlock = $_POST['typeBlock'];
-        $section = $_POST['section'];
-    $tfNoOfLot = $_POST['tfNoOfLot'];
-    $tfStatus = $_POST['tfStatus'];
+if (isset($_POST['btnSubmit'])){
     
+        $tfBlockName = $_POST['tfBlockName'];
+        $typeBlock = $_POST['typeBlock'];
+        $section = $_POST['section'];
+        $tfNoOfLot = $_POST['tfNoOfLot'];
+        $tfStatus = $_POST['tfStatus'];
+		
         $sql = "CALL checkBlockCount($section)";
         $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
         mysql_select_db(constant('mydb'));
-        if($result = mysql_query($sql,$conn))
-        {
-            while($row = mysql_fetch_array($result)){
+        
+        if($result = mysql_query($sql,$conn)){
+        
+        while($row = mysql_fetch_array($result)){
+				   
                 mysql_close($conn);
+                
                 if(($row['curr'] + 1) > $row['max']){
                     echo "<script>alert('This section reach max limit of block!')</script>";
+                }else {
+					
+                $num_of_ids = $row['max']; //limit sa block
+                $i = 0; //Loop counter.
+                $l = "$tfBlockName"; //string sa lot nam
+				
+                while ($i < $num_of_ids){
+                     
+						$createtypes =  new createBlock();
+                        $createtypes->Create($l,$typeBlock,$section,$tfNoOfLot,$tfStatus);
+                        
+						$l++;
+                        
+						$i++; 
+					}
+                    echo "<script>alert('Succesfully created!')</script>";
                 }
-                else{
-                    $createtypes =  new createBlock();
-                $createtypes->Create($tfBlockName,$typeBlock,$section,$tfNoOfLot,$tfStatus);
-                }
-            }
         }
+
+    }
+
         
-      }
+}
     
-if (isset($_POST['btnSave']))
-      {
+if (isset($_POST['btnSave'])){
 
     //echo "Record sucessfully saved";
     $tfBlockID = $_POST['tfBlockID'];
-        $tfBlockName = $_POST['tfBlockName'];
+    $tfBlockName = $_POST['tfBlockName'];
     $typeBlock = $_POST['typeBlock'];
-        $section = $_POST['section'];
+    $section = $_POST['section'];
     $tfNoOfLot = $_POST['tfNoOfLot'];
-    
-        $updateBlock =  new updateBlock();
+
+    $updateBlock =  new updateBlock();
     $updateBlock->update($tfBlockID,$typeBlock,$tfBlockName,$section,$tfNoOfLot);
-      }
+}
       
-if (isset($_POST['btnDeactivate']))
-      {
+if (isset($_POST['btnDeactivate'])){
 
     //echo "Record sucessfully saved";
     $tfBlockID = $_POST['tfBlockID'];
@@ -61,9 +76,17 @@ if (isset($_POST['btnDeactivate']))
     
     $deactivateBlock =  new deactivateBlock();
     $deactivateBlock->deactivate($tfBlockID);
-      }
+}
 
+if (isset($_POST['btnArchive'])){
 
+    //echo "Record sucessfully saved";
+    $tfBlockID = $_POST['tfBlockID'];
+    
+    
+    $archiveBlock =  new archiveBlock();
+    $archiveBlock->archive($tfBlockID);
+}
     
 ?>
 
@@ -151,7 +174,7 @@ if (isset($_POST['btnDeactivate']))
                                                 <div class="form-group">
                                                         <label class="col-md-5" style = " font-size: 18px;" align="right" style="margin-top:.30em">Block:</label>
                                                         <div class="col-md-6">
-                                                            <input type="text" class="form-control input-md" name= "tfBlockName" required>
+                                                            <input type="text" class="form-control input-md" name= "tfBlockName" value="A" readonly>
                                                         </div>
                                                 </div>
                                                                                 
@@ -201,7 +224,17 @@ if (isset($_POST['btnDeactivate']))
                                 </div><!--col-md-4 column-->
                                 
                                 <div class="col-md-8">
-                                    <div class="panel panel-success ">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <form class="form-vertical" role="form" action = "block.php" method= "post">
+                                                    <div class="col-md-5">
+                                                        <h4><b>Show Terminated Block?</b></h4>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                    <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                </form>
+                     	                  </div><!-- /.panel-heading -->
+                                           
                                         <div class="panel-body">    		
                                             <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                                 <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
@@ -217,9 +250,22 @@ if (isset($_POST['btnDeactivate']))
                                                 
                                                         <tbody>
                                                             <?php
-                                                                $view = new block();
-                                                                $view->viewBlock();
-                                                            ?>
+                                                            
+                                                              if (isset($_POST['btnGo'])){
+                                                                    $viewDeactivate = new deactivatedBlock();
+                                                                    $viewDeactivate->viewDeactivatedBlock();
+                                                              }
+                                                              else if(isset($_POST['btnBack'])){
+                                                                    $view = new block();
+                                                                    $view->viewBlock();
+                                                              }
+                                                              else{
+                                                                  $view1 = new block();
+                                                                  $view1->viewBlock();
+                                                              }
+                                                              
+                                                             ?>
+                                                         
                                                         </tbody>
                                                 </table>
                                             </div><!-- /.table-responsive -->

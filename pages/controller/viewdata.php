@@ -132,23 +132,51 @@ class types{
                 
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
-    }//function viewTypes()         
+    }//function viewTypes()     
+
+
+    //QUERY
+//__________________________________________________
+     function viewTypesQuery(){
+        $sql = "Select * from tbltypeoflot WHERE intStatus = 0 ORDER BY strTypeName ASC";
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+        while($row = mysql_fetch_array($result))
+          { 
+                $intTypeID = $row['intTypeID']; 
+                $strTypeName = $row['strTypeName'];
+                $intNoOfLot = $row['intNoOfLot'];
+                $dblSellingPrice = $row['dblSellingPrice'];
+                $intStatus = $row['intStatus']; 
+                
+                echo "<tr>
+                          <td style = 'font-size:18px;'>$strTypeName</td>
+                          <td style = 'font-size:18px; text-align: right;'>$intNoOfLot</td>
+                          <td style = 'font-size:18px; text-align: right;'>₱ ".number_format($dblSellingPrice,2)."</td>
+      
+                      </tr>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewTypesQuery()         
 }//class lot type
 //_________________________________________
 
 class interest{
 
-    function viewInterest(){
+       function viewInterest(){
         
-		$sql = "Select i.intInterestID, i.intYear, i.dblPercent,i.intStatus, i.intAtNeed, t.strTypeName FROM tblinterest i
+        $sql = "Select i.intInterestID, i.intYear, i.dblPercent,i.intStatus, i.intAtNeed, t.strTypeName FROM tblinterest i
                 INNER JOIN tbltypeoflot t ON i.intTypeID = t.intTypeID WHERE i.intStatus = '0' ORDER BY t.strTypeName ASC";
         
         $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
         mysql_select_db(constant('mydb'));
         $result = mysql_query($sql,$conn);
         
-		while($row = mysql_fetch_array($result))
-		  { 
+        while($row = mysql_fetch_array($result))
+          { 
             $intInterestID =$row['intInterestID'];
             $strTypeName =$row['strTypeName'];
             $intYear     =$row['intYear'];
@@ -165,53 +193,52 @@ class interest{
             
             $dblPercentValue = $dblPercent*100;
               
-		echo "<tr><td style = 'font-size:18px;'>$strTypeName</td>
-				   <td style = 'font-size:18px; text-align: right;'>$intYear</td>
-				   <td style = 'font-size:18px;'>$tfAtNeed</td>
-				   <td style = 'font-size:18px; text-align: right;'>$dblPercentValue %</td>
-				   
+        echo "<tr><td style = 'font-size:18px;'>$strTypeName</td>
+                   <td style = 'font-size:18px; text-align: right;'>$intYear</td>
+                   <td style = 'font-size:18px;'>$tfAtNeed</td>
+                   <td style = 'font-size:18px; text-align: right;'>$dblPercentValue %</td>
+                   
                    <td align='center'>
                        <button type = 'button' class = 'btn btn-success' data-toggle = 'modal' title='Edit' data-target = '#update$intInterestID'>
                        <i class='glyphicon glyphicon-pencil'></i></button>
                        <button type = 'button' class = 'btn btn-danger' data-toggle = 'modal' title='Deactivate' data-target = '#deactivate$intInterestID'>
                        <i class='glyphicon glyphicon-trash'></i></button>
                    </td>
-			   </tr>
+               </tr>
                
                <div class = 'modal fade' id = 'update$intInterestID'>
-						<div class = 'modal-dialog' style = 'width: 40%;'>
-							<div class = 'modal-content' >
-											
-												<!--header-->
-									<div class = 'modal-header' style='background:#b3ffb3;'>
-										<button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
-										<H3><b>Update: Interest Rate</b></H3>
-									</div>
-												
-												<!--body (form)-->
-									<div class = 'modal-body'>
-										<form class='form-horizontal' role='form' action = 'interest.php' method= 'POST'>						  
-														  
-											<div class='form-group'>
-												<div class=''>
-												   <input type='hidden' class='form-control' name= 'tfInterestID' 
-                                                   value='$intInterestID' >
-												 </div>
-											</div>
-														 
+                        <div class = 'modal-dialog' style = 'width: 40%;'>
+                            <div class = 'modal-content' >
+                                            
+                                                <!--header-->
+                                    <div class = 'modal-header' style='background:#b3ffb3;'>
+                                        <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
+                                        <H3><b>Update: Interest Rate</b></H3>
+                                    </div>
+                                                
+                                                <!--body (form)-->
+                                    <div class = 'modal-body'>
+                                        <form class='form-horizontal' role='form' action = 'interest.php' method= 'POST'>                         
+                                                          
+                                            <div class='form-group'>
+                                                <div class=''>
+                                                   <input type='hidden' class='form-control' name= 'tfInterestID' value='$intInterestID' >
+                                                 </div>
+                                            </div>
+                                                         
                                             <div class='row'>              
-											    <div class='form-group'>
-												    <label class='col-md-4' align='right' style = 'font-size: 18px; margin-top:.30em;'>Lot Type:</label>
-												    <div class='col-md-7'>
-													     <select class='form-control' id='sel1' name = 'typeLot' required>";
-															 
+                                                <div class='form-group'>
+                                                    <label class='col-md-4' align='right' style = 'font-size: 18px; margin-top:.30em;'>Lot Type:</label>
+                                                    <div class='col-md-7'>
+                                                         <select class='form-control' id='sel1' name = 'typeLot' required>";
+                                                             
                                                             $sql4 =  "select * FROM tbltypeoflot where intStatus = '0' Order by strTypeName ASC";
                                                             $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
                                                             mysql_select_db(constant('mydb'));
                                                             $result4 = mysql_query($sql4,$conn);
          
                                                              
-															while($row4 = mysql_fetch_array($result4)){
+                                                            while($row4 = mysql_fetch_array($result4)){
                                                                 $intTypeID1 =$row4['intTypeID'];
                                                                 $strTypeName1 =$row4['strTypeName'];
                                                                 echo "<option value = $intTypeID1";
@@ -222,12 +249,12 @@ class interest{
                                                                 
                                                                 echo ">$strTypeName1</option>";
                                                             }
-															 
-													 echo "</select>
-												</div>
-				    						 </div>
+                                                             
+                                                     echo "</select>
+                                                </div>
+                                             </div>
                                            </div>
-											
+                                            
                                             <div class='row'>
                                                 <div class='form-group' >
                                                     <label class='col-md-4' align='right' style = 'font-size: 18px; margin-top:.30em;'>No. of Year:</label>
@@ -250,17 +277,17 @@ class interest{
                                             </div>
                                             
                                             <div class='form-group modal-footer'> 
-												<div class='col-sm-offset-4 col-sm-8'>
-													<button type='submit' class='btn btn-success' name= 'btnSave'>Save</button>
+                                                <div class='col-sm-offset-4 col-sm-8'>
+                                                    <button type='submit' class='btn btn-success' name= 'btnSave'>Save</button>
                                                     <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-												</div>
-											</div>
-										</form>
-									</div>
-											
-								</div><!-- content-->
-							</div>
-						</div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                            
+                                </div><!-- content-->
+                            </div>
+                        </div>
                         
                          <!--DEACTIVATED MODAL-->
                             <div class = 'modal fade' id = 'deactivate$intInterestID'>
@@ -277,7 +304,7 @@ class interest{
                                         <div class = 'modal-body'>
                                         
                                         <h3>Are you sure you want deactivate $strTypeName?</h3>
-                                            <form class='form-horizontal' role='form' action = 'interest.php' method= 'POST'>						  
+                                            <form class='form-horizontal' role='form' action = 'interest.php' method= 'POST'>                         
                                                   <div class='form-group'>
                                                     <div class='col-sm-8'>
                                                         <input type='hidden' class='form-control' name= 'tfInterestID' 
@@ -299,7 +326,44 @@ class interest{
                             </div>";
                 
             }//while($row = mysql_fetch_array($result))
-			  mysql_close($conn);         
+              mysql_close($conn);         
+    }//function viewInterest()
+//_________________________________________________________________________________________________
+
+       function viewInterestQuery(){
+        
+        $sql = "Select i.intInterestID, i.intYear, i.dblPercent,i.intStatus, i.intAtNeed, t.strTypeName FROM tblinterest i
+                INNER JOIN tbltypeoflot t ON i.intTypeID = t.intTypeID WHERE i.intStatus = '0' ORDER BY t.strTypeName ASC";
+        
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+        while($row = mysql_fetch_array($result))
+          { 
+            $intInterestID =$row['intInterestID'];
+            $strTypeName =$row['strTypeName'];
+            $intYear     =$row['intYear'];
+            $dblPercent =$row['dblPercent'];
+            $intStatus=$row['intStatus'];
+            $intAtNeed=$row['intAtNeed'];
+            
+            if($intAtNeed==1){
+              $tfAtNeed ="Yes";
+            }else{
+                $tfAtNeed="No";
+            }
+          
+            
+            $dblPercentValue = $dblPercent*100;
+              
+        echo "<tr><td style = 'font-size:18px;'>$strTypeName</td>
+                   <td style = 'font-size:18px; text-align: right;'>$intYear</td>
+                   <td style = 'font-size:18px;'>$tfAtNeed</td>
+                   <td style = 'font-size:18px; text-align: right;'>$dblPercentValue %</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
     }//function viewInterest()
     
     function selectTypeBlock(){
@@ -314,6 +378,8 @@ class interest{
         }
          mysql_close($conn);
     }//function selectTypeBlock
+
+
 
 }//class interest
 //______________________________________________________________
@@ -435,6 +501,29 @@ class section{
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
     }//function viewSection()
+    //viewSectionQuery
+//______________________________________________________
+     function viewSectionQuery(){
+        
+        $sql = "Select * from tblsection WHERE intStatus = 0 ORDER BY strSectionName ASC";
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+            while($row = mysql_fetch_array($result)){
+                
+                $intSectionID = $row['intSectionID']; 
+                $strSectionName = $row['strSectionName'];
+                $intNoOfBlock = $row['intNoOfBlock'];
+                $intStatus = $row['intStatus']; 
+                
+                echo "<tr>
+                          <td style ='font-size:20px;'>$strSectionName</td>
+                          <td style = 'text-align: right; font-size: 18px;'>$intNoOfBlock</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewSectionQuery()
 }//class section
 //________________________________________________________________
 	
@@ -622,6 +711,38 @@ class block{
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
     }//function viewBlock()         
+
+
+//___________________________________________________________________
+        function viewBlockQuery(){
+        
+        $sql = "SELECT b.intBlockID, b.strBlockName, b.intNoOfLot, b.intStatus, t.strTypeName, s.strSectionName FROM tblblock b INNER JOIN tblsection s 
+                ON b.intSectionID = s.intSectionID 
+                INNER JOIN tbltypeoflot t ON b.intTypeID = t.intTypeID WHERE b.intStatus = 0 ORDER BY strBlockName ASC";
+        
+                $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+                mysql_select_db(constant('mydb'));
+                $result = mysql_query($sql,$conn);
+        
+                while($row = mysql_fetch_array($result)){
+            
+                $intBlockID = $row['intBlockID']; 
+                $strBlockName = $row['strBlockName'];
+                $intNoOfLot = $row['intNoOfLot'];
+                $intStatus = $row['intStatus'];
+                $strTypeName = $row['strTypeName'];
+                $strSectionName = $row['strSectionName'];
+                 
+                
+                echo "<tr>
+                          <td style ='font-size:18px;'>$strBlockName</td>
+                          <td style ='font-size:18px;'> $strTypeName</td>
+                          <td style ='font-size:18px;'> $strSectionName</td>
+                          <td style ='font-size:18px; text-align:right;'>$intNoOfLot</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewBlockQuery()         
 
 
 	function selectSection(){
@@ -844,6 +965,49 @@ class lot{
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
     }//function viewLot()    
+
+        function viewLotQuery(){
+        
+        $sql = "Select l.intLotID, l.strLotName, b.strBlockName, t.strTypeName, s.strSectionName, l.intLotStatus, l.intStatus 
+                    FROM tbllot l  
+                        INNER JOIN tblBlock b ON l.intBlockID = b.intBlockID 
+                        INNER JOIN  tbltypeoflot t ON b.intTypeID = t.intTypeID
+                        INNER JOIN tblsection s ON b.intSectionID = s.intSectionID WHERE l.intStatus = '0' ORDER BY  strLotName ASC";
+
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+
+
+        while($row = mysql_fetch_array($result)){ 
+              
+          $intLotID =$row['intLotID'];
+          $strLotName =$row['strLotName'];
+          $strBlockName =$row['strBlockName'];
+          $strTypeName=$row['strTypeName'];
+          $strSectionName =$row['strSectionName'];
+          $intLotStatus =$row['intLotStatus'];
+          $intStatus =$row['intStatus'];
+          
+          if($intLotStatus==0){
+              $LotStatus ="Available";
+          }else if($intLotStatus==1){
+              $LotStatus="Reserved";
+          }else{
+              $LotStatus="Occupied";
+          }
+                      
+          echo 
+              "<tr><td style ='font-size:18px;'>$strLotName</td>
+                   <td style ='font-size:18px;'>$strBlockName</td>
+                   <td style ='font-size:18px;'>$strTypeName</td>
+                   <td style ='font-size:18px;'>$strSectionName</td>
+                   <td style ='font-size:18px;'>$LotStatus</td> ";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewLotQuery()    
     
     
 	
@@ -985,6 +1149,27 @@ class ashCrypt{
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
     }//function viewBuilding()
+
+     function viewAshCryptQuery(){
+        
+        $sql = "Select * from tblashcrypt where intStatus='0' order by strAshName asc";
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+       
+        while($row = mysql_fetch_array($result))
+          { 
+            $intAshID = $row['intAshID'];
+            $strAshName =$row['strAshName'];
+            $intNoOfLevel =$row['intNoOfLevel'];
+            
+              
+        echo "<tr><td style ='font-size:18px;'>$strAshName</td>
+                  <td style = 'text-align: right; font-size:20px;'>$intNoOfLevel</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewBuildingQuery()
 	
 }//class aschcrypt
 //___________________________________________
@@ -1155,7 +1340,36 @@ class levelAC{
                 
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
-    }//function viewLA()
+
+        }
+        //________________________________________________________________________________________________
+        function viewLevelACQuery(){
+        
+        $sql = "Select la.intLevelAshID, la.strLevelName, la.intStatus, la.intNoOfUnit, ac.strAshName, la.dblSellingPrice from tbllevelash la
+                  INNER JOIN tblashcrypt ac ON la.intAshID = ac.intAshID where la.intStatus ='0' ORDER BY la.strLevelName ASC";
+        
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+        while($row = mysql_fetch_array($result))
+          { 
+            $intLevelAshID =$row['intLevelAshID'];
+            $strLevelName =$row['strLevelName'];
+            $strAshName =$row['strAshName'];
+            $intNoOfUnit =$row['intNoOfUnit'];
+            $dblSellingPrice =$row['dblSellingPrice'];
+              
+            echo "<tr>
+                    <td style ='font-size:18px;'>$strLevelName</td>
+                    <td style ='font-size:18px;'>$strAshName</td>
+                    <td style = 'text-align: right; font-size:18px;'>$intNoOfUnit</td>
+                    
+                    <td style = 'text-align: right; font-size:18px;'>₱ ".number_format($dblSellingPrice,2)."</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+     }//function viewLA()
     
     
 	
@@ -1362,6 +1576,44 @@ class interestForLevel{
          mysql_close($conn);
     }//function selectLevel
 
+    function viewInterestQuery(){
+        
+        $sql = "SELECT iL.intInterestID, iL.intYear, iL.dblPercent, iL.intStatus, iL.intAtNeed, l.strLevelName, a.strAshName FROM tblinterestforlevel iL
+                  INNER JOIN tbllevelash l ON iL.intLevelAshID = l.intLevelAshID 
+                  INNER JOIN tblashcrypt a ON l.intAshID = a.intAshID WHERE iL.intStatus='0' ORDER BY l.strLevelName ASC";
+        
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+        while($row = mysql_fetch_array($result))
+          { 
+            $intInterestID =$row['intInterestID'];
+            $strLevelName =$row['strLevelName'];
+            $strAshName =$row['strAshName'];
+            $intYear     =$row['intYear'];
+            $dblPercent =$row['dblPercent'];
+            $intStatus=$row['intStatus'];
+            $intAtNeed=$row['intAtNeed'];
+            
+            if($intAtNeed==1){
+              $tfAtNeed ="Yes";
+            }else{
+                $tfAtNeed="No";
+            }
+            
+            $dblPercentValue = $dblPercent*100;
+              
+        echo "<tr><td style ='font-size:18px;'>$strLevelName ($strAshName)</td>
+                   <td style = 'text-align: right; font-size:18px;'>$intYear</td>
+                   <td style = 'font-size:18px;'>$tfAtNeed</td>
+                   <td style = 'text-align: right; font-size:18px;'>$dblPercentValue %</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewInterest()
+    
+
 }//class interestForlevel
 //_______________________________________________________
 
@@ -1564,6 +1816,46 @@ class ashUnit{
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
     }//function viewAshUnit()
+    //_________________________________________________________________________________________
+ function viewAshUnitQuery(){
+        
+        $sql = "select acUnit.intUnitID, acUnit.strUnitName, acUnit.intUnitStatus, acUnit.intStatus, la.strLevelName, ac.strAshName, acUnit.intCapacity from tblacunit acUnit
+                inner join tbllevelash la ON acUnit.intLevelAshID = la.intLevelAshID 
+                inner join tblashcrypt ac ON la.intAshID = ac.intAshID where acUnit.intStatus=0 order by acUnit.strUnitName asc";    
+        
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+        while($row = mysql_fetch_array($result))
+          { 
+            $intUnitID =$row['intUnitID'];
+            $strUnitName =$row['strUnitName'];
+            $strLevelName =$row['strLevelName'];
+            $strAshName =$row['strAshName'];
+            $intCapacity =$row['intCapacity'];
+            
+            $intUnitStatus =$row['intUnitStatus'];
+            $intStatus=$row['intStatus'];
+            
+            if($intUnitStatus==0){
+                $AshStatus="Available";
+            }else if($intUnitStatus==1){
+                $AshStatus="Reserved";
+            }else{
+                $AshStatus="Occupied";
+            }
+              
+             echo "<tr>
+                        <td style ='font-size:18px;'>$strUnitName</td>
+                        <td style ='font-size:18px;'>$strLevelName</td>
+                        <td style ='font-size:18px;'>$strAshName</td>
+                        <td align='right'; style ='font-size:18px;'>$intCapacity</td>
+                        <td style ='font-size:18px;'>$AshStatus</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewAshUnit()
 
 
 	
@@ -1711,6 +2003,29 @@ class service{
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
     }//function viewService()
+ function viewServiceQuery(){
+        
+        $sql = "Select * from tblservice where intStatus='0' ORDER BY strServiceName ASC";
+        
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+
+        while($row = mysql_fetch_array($result))
+          { 
+              $intServiceID = $row['intServiceID'];
+              $strServiceName = $row['strServiceName'];
+              $dblServicePrice = $row['dblServicePrice'];
+              
+     echo 
+              "<tr>
+                   <td style ='font-size:18px;'>$strServiceName</td>
+                   <td style = 'text-align: right; font-size:18px;'>₱ ".number_format($dblServicePrice,2)."</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
+    }//function viewService()
 
 
 }//class service
@@ -1846,6 +2161,37 @@ class discount{
                 
             }//while($row = mysql_fetch_array($result))
 			  mysql_close($conn);         
+    }//function viewDiscount()
+     function viewDiscountQuery(){
+        
+        $sql = "select d.intDiscountID, s.strServiceName, d.strDescription, d.dblPercent, d.intStatus FROM tbldiscount d
+                       INNER JOIN tblservice s ON d.intServiceID = s.intServiceID where d.intStatus='0' ORDER BY s.strServiceName ASC";
+
+        
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+        
+
+        while($row = mysql_fetch_array($result))
+          { 
+              
+              $intDiscountID =$row['intDiscountID'];
+              $strServiceName =$row['strServiceName'];
+              $strDescription =$row['strDescription'];
+              $dblPercent =$row['dblPercent'];
+              $intStatus =$row['intStatus'];
+              
+              $dblPercentValue = $dblPercent*100;               
+             
+         echo 
+              "<tr>
+                    <td style ='font-size:18px;'>$strServiceName</td>
+                    <td style ='font-size:18px;'>$strDescription</td>
+                    <td style = 'text-align: right; font-size:18px;'>$dblPercentValue %</td>";
+                
+            }//while($row = mysql_fetch_array($result))
+              mysql_close($conn);         
     }//function viewDiscount()
 
         function selectService(){
