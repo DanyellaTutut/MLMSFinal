@@ -138,7 +138,6 @@ if (isset($_POST['btnDeactivate']))
             vertical-align: middle;
             border-radius: 50%;
             color: #fff;
-            position: relative;
           }
 
           .available {
@@ -225,8 +224,7 @@ if (isset($_POST['btnDeactivate']))
               });
 
               $('body').on('change', '#selectBlock', function(){
-                thisBlockID = $(this).val();
-                $('#lotMap').html('');                
+                thisBlockID = $(this).val();                
                 $.get("getData.php?fnName=getLot&intBlockID="+thisBlockID, function(data){
                   if(data != 0) {
                     arrayData = data.split(",");
@@ -239,9 +237,9 @@ if (isset($_POST['btnDeactivate']))
                         default: break;
                       }
                       $('#lotMap').append("<div class='lot "+lotStatus+"' id="+arrayData[i]+" lotStatus="+intLotStatus+">"+arrayData[i+1]+"</div>");
-                    //  $('#legendLotAvailable').html(intLotAvailable);
-                     // $('#legendLotReserved').html(intLotReserved);
-                     // $('#legendLotOwned').html(intLotOwned);
+                      $('#legendLotAvailable').html(intLotAvailable);
+                      $('#legendLotReserved').html(intLotReserved);
+                      $('#legendLotOwned').html(intLotOwned);
                     }
                   }
                 });
@@ -297,7 +295,7 @@ if (isset($_POST['btnDeactivate']))
               $('.ash').width($('#levelMap')[0].scrollWidth-20);
               $('#legendAshAvailable').html(intAshAvailable);
               $('#legendAshReserved').html(intAshReserved);
-             $('#legendAshOwned').html(intAshOwned);
+              $('#legendAshOwned').html(intAshOwned);
             });
           }
         </script>   
@@ -374,39 +372,29 @@ if (isset($_POST['btnDeactivate']))
                                                     </button>
                                             </div>
 
-                                   <div class="panel panel-success col-md-12">
+                                   <div class="panel panel-success ">
                                         <div class="panel-heading">
                                             <H3><b>Legends :</b></H3>
                                         </div><!-- /.panel-heading -->
                                         <div class="panel-body">
                                           <center>
                                             <div>
-                                            <div class="panel body col-md-4">
                                               <div class="circle available" id="legendLotAvailable">
                                               </div>
                                               Available
-                                              </div>
                                             </div>
-
                                             <div>
-                                              <div class="panel-body col-md-3">
                                               <div class="circle reserved" id="legendLotReserved">
                                               </div>
                                               Reserved
                                             </div>
-                                            </div>
-
-
                                             <div>
-                                            <div class="panel-body col-md-4">
                                               <div class="circle owned" id="legendLotOwned">
                                               </div>
                                               Owned
                                             </div>
-                                            </div>
                                           </center>
                                         </div>
-                                        <div class="clearfix"></div>
                                 </div>
                                 </div>
 
@@ -427,10 +415,10 @@ if (isset($_POST['btnDeactivate']))
                      
                                         <div class="panel-body">
                                              <div class="form-group">
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Ashcrypt: </label>
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Block</label>
                                               <div class="col-md-9 col-sm-9 col-xs-12">
                                                 <select class="form-control" id="selectAshBlock">
-                                                  <option selected disabled>Choose Ashcrypt</option>
+                                                  <option selected disabled>Choose Block</option>
                                                   <?php
                                                     $sql = "Select * from tblashcrypt WHERE intStatus = 0 ORDER BY strAshName ASC";
                                                     $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
@@ -538,20 +526,6 @@ if (isset($_POST['btnDeactivate']))
     <script src="../build/js/custom.min.js"></script>
 
 
-
-    <script>
-      $(document).ready(function() {
-        $('#birthday').daterangepicker({
-          singleDatePicker: true,
-          calender_style: "picker_4"
-        }, function(start, end, label) {
-          console.log(start.toISOString(), end.toISOString(), label);
-        });
-      });
-    </script>
-    <!-- /bootstrap-daterangepicker -->
-
-
   
 
       <!-- Select2 -->
@@ -618,7 +592,7 @@ if (isset($_POST['btnDeactivate']))
                                                   <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Section: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input type="text" class="form-control" readonly="readonly" value=>
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="East">
                                                     </div>
                                                   </div>
 
@@ -692,9 +666,8 @@ if (isset($_POST['btnDeactivate']))
 
 
 
-               <!----------------------------------------------BILL OUT FORM---------------------------------->
                <div class = "modal fade" id = "billout">
-                <div class = "modal-dialog" style = "width:80%; height: 80%; ">
+                <div class = "modal-dialog" style = "width:70%; height: 60%; ">
                    <div class = "modal-content">
                      <!--header-->
                       
@@ -706,142 +679,20 @@ if (isset($_POST['btnDeactivate']))
                      <!--body (form)-->
                      <div class = "modal-body">
 
-                      <div class="row">
-                       <div class=  "col-lg-12">
-                          <div class="panel panel-default">
-                                <div class="panel-body">
-
-
-                           <div class="form-group col-md-6">       
-                                      <select class="select2_single form-control" style="width: 400px;" tabindex="-1" >
+                      <div class="form-group">       
+                                      <select class="select2_single form-control" style="width: 300px;" tabindex="-1" placeholder="Select Customer">
                                         <option></option>
                                         <option>Jeron Cruz</option>
                                         <option>Daniella Soriano</option>
                                       </select>
-                                  <button onclick="add();" type="submit" class="btn btn-success pull-left" name= "btnGo" data-toggle="modal" data-target="#addCust">Add customer</button>
-                                
-                              </div>
-
-
-                                      <div class="form-group col-md-6">
-                        
-                                          <div class="col-md-6 col-sm-9 col-xs-12">
-                                            <select class="form-control">
-                                              <option>Select Type Of Avail</option>
-                                              <option>Reserve Unit</option>
-                                              <option>Spotcash</option>
-                                              <option>At Need</option>
-                                            </select>
-                                          </div>
-                                      </div>
-
-              <div class="clearfix"></div>
-
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Unit List</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-
-                  <div class="x_content">
-
-                    <div class="table-responsive">
-                      <table class="table table-striped jambo_table bulk_action">
-                        <thead>
-                          <tr class="headings">
-                        
-                            <th class="column-title">Unit ID</th>
-                            <th class="column-title">Unit Details</th>
-                            <th class="column-title">Years to pay</th>
-                            <th class="column-title">Price</th>
-                            <th class="column-title">Discounted Price </th>
-                            <th class="column-title">Monthly</th>
-                            <th class="column-title no-link last"><span class="nobr">Action</span>
-                            </th>
-                            <th class="bulk-actions" colspan="7">
-                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                            </th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                          <tr class="even pointer">
-                            
-                            <td class=" ">Unit No.1</td>
-                            <td class=" "><button data-target="#popUpWindow" data-toggle="modal">View</button><i class="success fa fa-long-arrow-up"></i></td>
-                            <td class=" "><select class="form-control">
-                                              <option>1</option>
-                                            </select>
-                                          </div></td>
-                            <td class=" ">P76,230.00</td>
-                            <td class="a-right a-right ">P9,147.60</td>
-                            <td class=" ">P6,352.50</td>
-                            <td class=" last"><a href="#"><button>Remove</button></a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-
-                  <div class="panel panel-default">
-                                <div class="panel-body">
-
-                                <div class="form-group col-md-6">
-                        
-                                                              
-
-
-                                </div>
-                          </div>
-
-
-                          <div class="panel panel-default">
-                                <div class="panel-body">
-
-                                <div class="form-group col-md-7">
-                        
-                                          <div class="col-md-6 col-sm-9 col-xs-12">
-                                            <select class="form-control">
-                                              <option>Mode of Payment</option>
-                                              <option>Cash</option>
-                                              <option>Cheque</option>
-                                            </select>
-                                          </div>
-
-                                               <button>Cheque Details</button>  
-                                      </div>
-
-                          <div class="form-group col-md-7">
-                        <label class="control-label col-md-1 col-sm-3 col-xs-3">Amount Paid:</label>
-                        <div class="col-md-3 col-sm-9 col-xs-9">
-                          <input type="text" class="form-control" data-inputmask="'mask': '9,999.99'">
-                          
-                        </div>
-                      </div>
-
-
-                                </div>
-                          </div>
-                          <div class="modal-footer">
-                          <div class="col-md-8 col-sm-6 col-xs-12 col-md-offset-3">
-                            <button  onclick="$('#billout').modal().hide();" type="submit" class="btn btn-primary">Cancel</button>
-                            <button type="submit" class="btn btn-success" data-dissmiss="modal">Submit</button>
-                          </div>
-                        </div>
-
-
-                             </div>
-                          </div>
-                        </div>
-                       </div><!--row--?
+                                  <button type="submit" class="btn btn-success pull-left" name= "btnGo" data-toggle="modal" data-target="#addCust">Add customer</button>
+                                  <script type="text/javascript">
+                                    function add() {
+                                      $(".select2_single").append("<option>Pumasok?</option>");
+                                      alert("asdsd");
+                                    }
+                                  </script>
+                                  </div>
 
                      </div><!--/modal body-->
                   </div><!--/content-->
@@ -850,158 +701,83 @@ if (isset($_POST['btnDeactivate']))
 
 
 
-            <!------------------------------------------------------Customer FORM------------>
             <div class = "modal fade" id ="addCust">
                 <div class = "modal-dialog" style = "width:70%; height: 60%; ">
                    <div class = "modal-content">
                      <!--header-->
                       
                       <div class = "modal-header" style="background:#b3ffb3;">
-                      <button onclick="$('#addCust').modal().hide();" type = "button" class = "close" >&times;</button>
+                      <button type = "button" class = "close" data-dismiss = "modal">&times;</button>
                       <h3 class = "modal-title"><b>Customer Form</b></h3>
                      </div>
-
                                     
                      <!--body (form)-->
                      <div class = "modal-body">
-                    <div class="row">
-                       <div class=  "col-lg-12">
-                          <div class="panel panel-default">
-                                <div class="panel-body">
 
-                     <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-                        <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
-                          </label>
-                          <div class="col-md-4 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
-                          </label>
-                          <div class="col-md-4 col-sm-6 col-xs-12">
-                            <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
-                          <div class="col-md-4 col-sm-6 col-xs-12">
-                            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Address <span class="required">*</span>
-                          </label>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div id="gender" class="btn-group" data-toggle="buttons">
-                              <label class="btn btn-default" data-toggle-class="btn-success" data-toggle-passive-class="btn-default">
-                                <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
-                              </label>
-                              <label class="btn btn-primary" data-toggle-class="btn-default" data-toggle-passive-class="btn-default">
-                                <input type="radio" name="gender" value="female"> Female
-                              </label>
-                            </div>
-                          </div>
-                        </div>
+                        <div class="row">
+                          <div class="col-md-8">
+                               <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Civil Status * </label>
-                        Single:
-                        <input type="radio" class="flat" name="gender" id="Single" value="Single" checked="" required class="form-control col-md-7 col-xs-12" />   
-                        Married: 
-                        <input type="radio" class="flat" name="gender" id="Married" value="Married" checked="" required class="form-control col-md-7 col-xs-12" />  
-                        Widow / Widowed:
-                        <input type="radio" class="flat" name="gender" id="Widow" value="Widow"  class="form-control col-md-7 col-xs-12"/>   
-                      </div>
-                        <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
-                          </label>
-                          <div class="col-md-2 col-sm-6 col-xs-12">
-                            <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Contact No:
-                        <span class="required">*</span>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
                         </label>
-                        <div class="col-md-2 col-sm-9 col-xs-9">
-                          <input type="text" class="form-control"  required= "required" data-inputmask="'mask' : '(9999) 999-9999'">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
-
-                      <div class="item form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email: <span class="required">*</span>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
                         </label>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
-                          <input type="email" id="email" name="email" data-validate-linked="email" required="required" class="form-control col-md-7 col-xs-12">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
-                  
-                        <div class="modal-footer">
-                          <div class="col-md-8 col-sm-6 col-xs-12 col-md-offset-3">
-                            <button  onclick="$('#addCust').modal().hide();" type="submit" class="btn btn-primary">Cancel</button>
-                            <button type="submit" id=pasok class="btn btn-success" data-dissmiss="modal">Submit</button>
-
-                             <script type="text/javascript">
-                                    function add() {
-                                      $(".select2_single").append("<option>Alex Uy</option>");
-                                      //alert("asdsd");
-                                    }
-                                  </script>
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div id="gender" class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
+                            </label>
+                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                              <input type="radio" name="gender" value="female"> Female
+                            </label>
                           </div>
                         </div>
+                      </div>
+                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date Mask</label>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+                          <input type="text" class="form-control" data-inputmask="'mask': '99/99/9999'">
+                          <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
 
-                      </form>           
-                                </div>
+                    </form>
+
+
                           </div>
-                    </div>
-
-
-
-
-
-
+                        </div>
                
-                      <!--Sencya kana pre Formula for monthly amortization 
-
-                        MA = ((((BasePrice - Downpayment)*Interest Rate)*No of years) + BasePrice - Downpayment)) / (No.of years * 12)
-
-
-
-                        pre magagamit mo tong formula :P :()
-                      ---->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                      
 
                      </div><!--/modal body-->
                   </div><!--/content-->
                 </div>
             </div><!--/modal 2-->
-
   </body>
 </html>

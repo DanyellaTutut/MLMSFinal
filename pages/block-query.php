@@ -1,58 +1,77 @@
 <?php
 
 require ("controller/connection.php");
-require('controller/viewdata.php');
+require('controller/query-viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
+require('controller/archivedata.php');
+require('controller/retrieve.php');
 
 
 
-if (isset($_POST['btnSubmit']))
-      {
-
-    //echo "Record sucessfully saved";
-    $tfBlockName = $_POST['tfBlockName'];
-    $typeBlock = $_POST['typeBlock'];
-        $section = $_POST['section'];
-    $tfNoOfLot = $_POST['tfNoOfLot'];
-    $tfStatus = $_POST['tfStatus'];
+if (isset($_POST['btnSubmit'])){
     
+        $tfBlockName = $_POST['tfBlockName'];
+        $typeBlock = $_POST['typeBlock'];
+        $section = $_POST['section'];
+        $tfNoOfLot = $_POST['tfNoOfLot'];
+        $tfStatus = $_POST['tfStatus'];
+		
         $sql = "CALL checkBlockCount($section)";
         $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
         mysql_select_db(constant('mydb'));
-        if($result = mysql_query($sql,$conn))
-        {
-            while($row = mysql_fetch_array($result)){
+        
+        if($result = mysql_query($sql,$conn)){
+        
+        while($row = mysql_fetch_array($result)){
+				   
                 mysql_close($conn);
+                
                 if(($row['curr'] + 1) > $row['max']){
                     echo "<script>alert('This section reach max limit of block!')</script>";
+                }else {
+					
+                $num_of_ids = $row['max']; //limit sa block
+                $i = 0; //Loop counter.
+                $l = "$tfBlockName"; //string sa lot nam
+
+                while ($i < $num_of_ids){
+                     
+						$createtypes =  new createBlock();
+                        $flag = $createtypes->Create($l,$typeBlock,$section,$tfNoOfLot,$tfStatus);
+                       
+						$l++;
+                        
+						$i++; 
+					}
+                    
+                   if($flag == 1)
+                        echo "<script>alert('Succesfully created!')</script>";
+                   else
+                        echo "<script>alert('Duplicate Data!')</script>";
                 }
-                else{
-                    $createtypes =  new createBlock();
-                $createtypes->Create($tfBlockName,$typeBlock,$section,$tfNoOfLot,$tfStatus);
-                }
-            }
         }
+
+    }
+
         
-      }
+}
     
-if (isset($_POST['btnSave']))
-      {
+if (isset($_POST['btnSave'])){
 
     //echo "Record sucessfully saved";
     $tfBlockID = $_POST['tfBlockID'];
-        $tfBlockName = $_POST['tfBlockName'];
+    $tfBlockName = $_POST['tfBlockName'];
     $typeBlock = $_POST['typeBlock'];
-        $section = $_POST['section'];
+    $section = $_POST['section'];
     $tfNoOfLot = $_POST['tfNoOfLot'];
-    
-        $updateBlock =  new updateBlock();
+
+    $updateBlock =  new updateBlock();
     $updateBlock->update($tfBlockID,$typeBlock,$tfBlockName,$section,$tfNoOfLot);
-      }
+}
       
-if (isset($_POST['btnDeactivate']))
-      {
+if (isset($_POST['btnDeactivate'])){
 
     //echo "Record sucessfully saved";
     $tfBlockID = $_POST['tfBlockID'];
@@ -61,9 +80,17 @@ if (isset($_POST['btnDeactivate']))
     
     $deactivateBlock =  new deactivateBlock();
     $deactivateBlock->deactivate($tfBlockID);
-      }
+}
 
+if (isset($_POST['btnArchive'])){
 
+    //echo "Record sucessfully saved";
+    $tfBlockID = $_POST['tfBlockID'];
+    
+    
+    $archiveBlock =  new archiveBlock();
+    $archiveBlock->archive($tfBlockID);
+}
     
 ?>
 
@@ -78,7 +105,7 @@ if (isset($_POST['btnDeactivate']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Block</title>
+    <title>MLMS-Block-Query</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -133,10 +160,45 @@ if (isset($_POST['btnDeactivate']))
                             </div><!-- /.panel-heading -->
                                     
                             <div class="panel-body ">
-                               
-                                  
-                                       
-                                  	
+                                
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <form class="form-vertical" role="form" action = "block-query.php" method= "post">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <label class="col-md-2" style = "font-size: 18px;" align="right" style="margin-top:.30em">Filter by:</label>
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter">
+                                                                    <option value=""> --Choose Lot Type--</option>
+                                                                    <?php
+                                                                        $view = new block();
+                                                                        $view->selectTypeBlock();
+                                                                    ?>                                    
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter1">
+                                                                    <option value=""> --Choose Section--</option>
+                                                                    <?php
+                                                                        $view = new block();
+                                                                        $view->selectSection();
+                                                                    ?>>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-2">
+                                                                <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                                <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                            </div>
+                                                        </div><!-- FORM GROUP -->
+                                                    
+                                                    </div><!-- ROW -->
+                                                </form>
+                     	                  </div><!-- /.panel-heading -->
+                                           
+                                        <div class="panel-body">    		
                                             <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                                 <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                         <thead>
@@ -145,18 +207,66 @@ if (isset($_POST['btnDeactivate']))
                                                                     <th class = "success" style = "text-align: center; font-size: 20px;">Lot Type</th>
                                                                     <th class = "success" style = "text-align: center; font-size: 20px;">Section</th>
                                                                     <th class = "success" style = "text-align: center; font-size: 20px;">No. of Unit</th>
-                                                                    
                                                                 </tr>
                                                         </thead>
                                                 
                                                         <tbody>
                                                             <?php
-                                                                $view = new block();
-                                                                $view->viewBlockQuery();
-                                                            ?>
+                                                            
+                                                              if (isset($_POST['btnGo'])){
+                                                                  
+                                                                   $filter = $_POST['filter'];
+                                                                   $filter1 = $_POST['filter1'];
+                                                           
+                                                                    
+                                                                    $sql = "SELECT b.intBlockID, b.strBlockName, b.intNoOfLot, b.intStatus, t.strTypeName, s.strSectionName FROM tblblock b INNER JOIN tblsection s 
+                                                                                ON b.intSectionID = s.intSectionID 
+                                                                                INNER JOIN tbltypeoflot t ON b.intTypeID = t.intTypeID WHERE b.intStatus = 0 AND b.intTypeID = '".$filter."' AND b.intSectionID = '".$filter1."' ORDER BY strSectionName ASC";
+                                                                        
+                                                                    $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+                                                                    mysql_select_db(constant('mydb'));
+                                                                    $result = mysql_query($sql,$conn);
+                                                            
+                                                                    while($row = mysql_fetch_array($result)){
+                                                                
+                                                                        $intBlockID = $row['intBlockID']; 
+                                                                        $strBlockName = $row['strBlockName'];
+                                                                        $intNoOfLot = $row['intNoOfLot'];
+                                                                        $intStatus = $row['intStatus'];
+                                                                        $strTypeName = $row['strTypeName'];
+                                                                        $strSectionName = $row['strSectionName'];
+                                                                        
+                                                                        
+                                                                        echo "<tr>
+                                                                                <td style ='font-size:18px;'>$strBlockName</td>
+                                                                                <td style ='font-size:18px;'> $strTypeName</td>
+                                                                                <td style ='font-size:18px;'> $strSectionName</td>
+                                                                                <td style ='font-size:18px; text-align:right;'>$intNoOfLot</td>
+                                                                            </tr>";
+                                                                    }
+                                                                    mysql_close($conn);
+                                                      
+        
+                                                              }else if(isset($_POST['btnBack'])){
+                                                                    $view = new block();
+                                                                    $view->viewBlock();
+                                                              }else{
+                                                                  $view1 = new block();
+                                                                  $view1->viewBlock();
+                                                              }
+                                                              
+                                                             ?>
+                                                         
                                                         </tbody>
                                                 </table>
-        
+                                            </div><!-- /.table-responsive -->
+                                        </div><!--panel body -->
+                                    </div><!--panel panel-success-->
+                                </div><!--col-md-8-->   
+                    
+                            </div><!--panel body -->
+                        </div><!--panel panel-success-->
+                    </div><!--col-md-12-->
                 </div><!--row-->
             </div><!-- /page content -->
 

@@ -138,7 +138,6 @@ if (isset($_POST['btnDeactivate']))
             vertical-align: middle;
             border-radius: 50%;
             color: #fff;
-            position: relative;
           }
 
           .available {
@@ -225,8 +224,7 @@ if (isset($_POST['btnDeactivate']))
               });
 
               $('body').on('change', '#selectBlock', function(){
-                thisBlockID = $(this).val();
-                $('#lotMap').html('');                
+                thisBlockID = $(this).val();                
                 $.get("getData.php?fnName=getLot&intBlockID="+thisBlockID, function(data){
                   if(data != 0) {
                     arrayData = data.split(",");
@@ -239,9 +237,9 @@ if (isset($_POST['btnDeactivate']))
                         default: break;
                       }
                       $('#lotMap').append("<div class='lot "+lotStatus+"' id="+arrayData[i]+" lotStatus="+intLotStatus+">"+arrayData[i+1]+"</div>");
-                    //  $('#legendLotAvailable').html(intLotAvailable);
-                     // $('#legendLotReserved').html(intLotReserved);
-                     // $('#legendLotOwned').html(intLotOwned);
+                      $('#legendLotAvailable').html(intLotAvailable);
+                      $('#legendLotReserved').html(intLotReserved);
+                      $('#legendLotOwned').html(intLotOwned);
                     }
                   }
                 });
@@ -297,7 +295,7 @@ if (isset($_POST['btnDeactivate']))
               $('.ash').width($('#levelMap')[0].scrollWidth-20);
               $('#legendAshAvailable').html(intAshAvailable);
               $('#legendAshReserved').html(intAshReserved);
-             $('#legendAshOwned').html(intAshOwned);
+              $('#legendAshOwned').html(intAshOwned);
             });
           }
         </script>   
@@ -374,39 +372,29 @@ if (isset($_POST['btnDeactivate']))
                                                     </button>
                                             </div>
 
-                                   <div class="panel panel-success col-md-12">
+                                   <div class="panel panel-success ">
                                         <div class="panel-heading">
                                             <H3><b>Legends :</b></H3>
                                         </div><!-- /.panel-heading -->
                                         <div class="panel-body">
                                           <center>
                                             <div>
-                                            <div class="panel body col-md-4">
                                               <div class="circle available" id="legendLotAvailable">
                                               </div>
                                               Available
-                                              </div>
                                             </div>
-
                                             <div>
-                                              <div class="panel-body col-md-3">
                                               <div class="circle reserved" id="legendLotReserved">
                                               </div>
                                               Reserved
                                             </div>
-                                            </div>
-
-
                                             <div>
-                                            <div class="panel-body col-md-4">
                                               <div class="circle owned" id="legendLotOwned">
                                               </div>
                                               Owned
                                             </div>
-                                            </div>
                                           </center>
                                         </div>
-                                        <div class="clearfix"></div>
                                 </div>
                                 </div>
 
@@ -427,10 +415,10 @@ if (isset($_POST['btnDeactivate']))
                      
                                         <div class="panel-body">
                                              <div class="form-group">
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Ashcrypt: </label>
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Block</label>
                                               <div class="col-md-9 col-sm-9 col-xs-12">
                                                 <select class="form-control" id="selectAshBlock">
-                                                  <option selected disabled>Choose Ashcrypt</option>
+                                                  <option selected disabled>Choose Block</option>
                                                   <?php
                                                     $sql = "Select * from tblashcrypt WHERE intStatus = 0 ORDER BY strAshName ASC";
                                                     $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
@@ -536,20 +524,6 @@ if (isset($_POST['btnDeactivate']))
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
-
-
-
-    <script>
-      $(document).ready(function() {
-        $('#birthday').daterangepicker({
-          singleDatePicker: true,
-          calender_style: "picker_4"
-        }, function(start, end, label) {
-          console.log(start.toISOString(), end.toISOString(), label);
-        });
-      });
-    </script>
-    <!-- /bootstrap-daterangepicker -->
 
 
   
@@ -694,7 +668,7 @@ if (isset($_POST['btnDeactivate']))
 
                <!----------------------------------------------BILL OUT FORM---------------------------------->
                <div class = "modal fade" id = "billout">
-                <div class = "modal-dialog" style = "width:80%; height: 80%; ">
+                <div class = "modal-dialog" style = "width:100%; height: 100%; ">
                    <div class = "modal-content">
                      <!--header-->
                       
@@ -718,8 +692,15 @@ if (isset($_POST['btnDeactivate']))
                                         <option>Jeron Cruz</option>
                                         <option>Daniella Soriano</option>
                                       </select>
-                                  <button onclick="add();" type="submit" class="btn btn-success pull-left" name= "btnGo" data-toggle="modal" data-target="#addCust">Add customer</button>
+                                  <button type="submit" class="btn btn-success pull-left" name= "btnGo" data-toggle="modal" data-target="#addCust">Add customer</button>
                                 
+
+                                  <script type="text/javascript">
+                                    function add() {
+                                      $(".select2_single").append("<option>Pumasok?</option>");
+                                      alert("asdsd");
+                                    }
+                                  </script>
                               </div>
 
 
@@ -950,14 +931,7 @@ if (isset($_POST['btnDeactivate']))
                         <div class="modal-footer">
                           <div class="col-md-8 col-sm-6 col-xs-12 col-md-offset-3">
                             <button  onclick="$('#addCust').modal().hide();" type="submit" class="btn btn-primary">Cancel</button>
-                            <button type="submit" id=pasok class="btn btn-success" data-dissmiss="modal">Submit</button>
-
-                             <script type="text/javascript">
-                                    function add() {
-                                      $(".select2_single").append("<option>Alex Uy</option>");
-                                      //alert("asdsd");
-                                    }
-                                  </script>
+                            <button type="submit" class="btn btn-success" data-dissmiss="modal">Submit</button>
                           </div>
                         </div>
 

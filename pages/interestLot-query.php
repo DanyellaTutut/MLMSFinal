@@ -1,7 +1,7 @@
 <?php
 
 require ("controller/connection.php");
-require('controller/viewdata.php');
+require('controller/query-viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
@@ -82,7 +82,7 @@ if (isset($_POST['btnArchive']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Interest</title>
+    <title>MLMS-Interest Lot-Query</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -104,18 +104,7 @@ if (isset($_POST['btnArchive']))
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
  
-    <script>
-        function validateNumber(evt) {
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if (charCode == 8 || (charCode >= 48 && charCode <= 57)){
-                return true;
-                }else{
-                return false;
-                }
-            }
-        
-    </script>
+    
 </head>
 
 <body class="nav-sm">
@@ -134,32 +123,110 @@ if (isset($_POST['btnArchive']))
                             </div><!-- /.panel-heading -->
                      
                             <div class="panel-body">
-                                         
-                           
+
+                          
+                            <div class="col-md-12">
+                                <div class="panel panel-default ">
+                                    <div class="panel-heading">
+                                        <form class="form-vertical" role="form" action = "interestLot-query.php" method= "post">
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <label class="col-md-2" style = "font-size: 18px;" align="right" style="margin-top:.30em">Filter by:</label>
+                                                    <div class="col-md-4">
+                                                        <select class="form-control" name = "filter">
+                                                            <option value=""> --Choose Interest Status--</option>
+                                                            <option value="0">Pre-need</option>
+                                                            <option value="1">At-need</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <select class="form-control" name = "filter1">
+                                                            <option value=""> --Choose Lot Type--</option>
+                                                            <?php
+                                                                $view = new interest();
+                                                                $view->selectTypeBlock();
+                                                            ?>                                    
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                        <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                    </div>
+                                                </div><!-- FORM GROUP -->
+                                            
+                                            </div><!-- ROW -->
+                                        </form>
+                                    </div><!-- /.panel-heading -->
+                                           
+                                    <div class="panel-body">            
                                         <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                         <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                 <thead>
                                                     <tr>
-                                                        <th class = "success" style = "text-align: center; font-size: 20px;">Name</th>
+                                                        <th class = "success" style = "text-align: center; font-size: 20px;">Lot Type</th>
                                                         <th class = "success" style = "text-align: center; font-size: 20px;">No. of Year</th>
                                                         <th class = "success" style = "text-align: center; font-size: 20px;">At Need</th>
-                                                       <th class = "success" style = "text-align: center; font-size: 20px;">Percent</th>
-                                                        
+                                                        <th class = "success" style = "text-align: center; font-size: 20px;">Percent</th>
                                                     </tr>
                                                 </thead>
                                                 
                                                 <tbody>
                                                     <?php
-                                                             
-                                                                  $view1 = new interestForlevel();
-                                                                  $view1->viewInterestQuery();
-                                                             
-                                                      ?>
-                                                    
+                                                        if (isset($_POST['btnGo'])){
+                                                            $filter = $_POST['filter'];
+                                                            $filter1 = $_POST['filter1'];
+                                                            
+                                                            $sql = "SELECT i.intInterestID, i.intYear, i.dblPercent,i.intStatus, i.intAtNeed, t.strTypeName, t.intStatus FROM tblinterest i
+		                                                                          INNER JOIN tbltypeoflot t ON i.intTypeID = t.intTypeID WHERE i.intStatus = '0'  AND i.intAtNeed = '".$filter."' AND t.intTypeID = '".$filter1."'  ORDER BY t.strTypeName ASC";
+
+                                                            $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+                                                                    mysql_select_db(constant('mydb'));
+                                                                    $result = mysql_query($sql,$conn);
+                                                                    while($row = mysql_fetch_array($result)){
+                                                                        
+                                                                        $intInterestID =$row['intInterestID'];
+                                                                        $strTypeName =$row['strTypeName'];
+                                                                        $intYear     =$row['intYear'];
+                                                                        $dblPercent =$row['dblPercent'];
+                                                                        $intStatus=$row['intStatus'];
+                                                                        $intAtNeed=$row['intAtNeed'];
+                                                                        
+                                                                        if($intAtNeed==1){
+                                                                        $tfAtNeed ="Yes";
+                                                                        }else{
+                                                                            $tfAtNeed="No";
+                                                                        }
+                                                                    
+                                                                        
+                                                                        $dblPercentValue = $dblPercent*100;
+            
+                                                                        
+                                                                        echo 
+                                                                            "<tr><td style = 'font-size:18px;'>$strTypeName</td>
+                                                                                <td style = 'font-size:18px; text-align: right;'>$intYear</td>
+                                                                                <td style = 'font-size:18px;'>$tfAtNeed</td>
+                                                                                <td style = 'font-size:18px; text-align: right;'>$dblPercentValue %</td>
+			   
+                                                                            </tr>";
+                                                                    }
+                                                                    mysql_close($conn);
+                                                                    
+                                                        }else if(isset($_POST['btnBack'])){
+                                                            $view = new interest();
+                                                            $view->viewInterest();
+                                                        }
+                                                        else{
+                                                            $view1 = new interest();
+                                                            $view1->viewInterest();
+                                                        }
+                                                    ?>
                                                 </tbody>
                                         </table>
                                     </div><!-- /.table-responsive -->
-                            
+                                    </div><!--panel body -->
+                                </div><!--panel panel-success-->
+                            </div><!--col-md-8-->   
+
                         </div><!--panel body -->
                     </div><!--panel panel-success-->
                 </div><!--col-md-12-->

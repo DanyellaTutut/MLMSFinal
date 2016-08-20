@@ -1,7 +1,7 @@
 <?php
 
 require ("controller/connection.php");
-require('controller/viewdata.php');
+require('controller/query-viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
@@ -42,7 +42,7 @@ if (isset($_POST['btnSubmit'])){
 						
                         
 						$createAshUnit =  new createAshUnit();
-                        $createAshUnit->Create($id,$levelName,$status,$tfStatus,$tfCapacity);
+                        $flag = $createAshUnit->Create($id,$levelName,$status,$tfStatus,$tfCapacity);
                         
 						if ($n == 9999) { //Once the number reaches 9999, increase the letter by one and reset number to 0.
 							$n = 0;
@@ -52,7 +52,10 @@ if (isset($_POST['btnSubmit'])){
 						
 						$i++; $n++; //Letters can be incremented the same as numbers. Adding 1 to "AAA" prints out "AAB".
 					}
-                    echo "<script>alert('Succesfully created!')</script>";
+                    if($flag == 1)
+                        echo "<script>alert('Succesfully created!')</script>";
+                    else
+                        echo "<script>alert('Duplicate Data!')</script>";
                 }
         }
         
@@ -101,7 +104,7 @@ if (isset($_POST['btnArchive'])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Ashcrypt-Unit</title>
+    <title>MLMS-Ashcrypt-Unit-Query</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -157,7 +160,47 @@ if (isset($_POST['btnArchive'])){
                             </div><!-- /.panel-heading -->
                      
                             <div class="panel-body">
-                                    	
+                                
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <form class="form-vertical" role="form" action = "ash-query.php" method= "post">
+                                            
+                                                 <div class="row">
+                                                        <div class="form-group">
+                                                            <label class="col-md-2" style = "font-size: 18px;" align="right" style="margin-top:.30em">Filter by:</label>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter1">
+                                                                    <option value=""> --Choose Level (Block)--</option>
+                                                                    <?php
+                                                                       $view = new ashUnit();
+                                                                       $view->selectLevel(); 
+                                                                    ?>>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter2">
+                                                                    <option value=""> --Choose Status--</option>
+                                                                    <option value="0"> Available</option>
+                                                                    <option value="1"> Reserve</option>
+                                                                    <option value="2"> Occupied</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-2">
+                                                                <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                                <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                            </div>
+                                                        </div><!-- FORM GROUP -->
+                                                    
+                                                    </div><!-- ROW -->
+                                            
+                                            </form>
+                     	                  </div><!-- /.panel-heading -->
+                                           
+                                        <div class="panel-body">         
                                             <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                                 <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                     <thead>
@@ -167,23 +210,75 @@ if (isset($_POST['btnArchive'])){
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Block</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Capacity</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Status</th>
-                                                               
                                                             </tr>
                                                         </thead>
                                                         
                                                         <tbody>
                                                             <?php
-                                                         
-                                                                    $view1 = new ashUnit();
-                                                                    $view1->viewAshUnitQuery();
                                                             
+                                                              if (isset($_POST['btnGo'])){
+                                                              
+                                                                 $filter1 = $_POST['filter1'];
+                                                                 $filter2 = $_POST['filter2'];
+                                                                 
+                                                                 $sql = "SELECT acUnit.intUnitID, acUnit.strUnitName, acUnit.intUnitStatus, acUnit.intStatus, la.strLevelName, ac.strAshName, acUnit.intCapacity FROM tblacunit acUnit
+                                                                                INNER JOIN tbllevelash la ON acUnit.intLevelAshID = la.intLevelAshID 
+                                                                                INNER JOIN tblashcrypt ac ON la.intAshID = ac.intAshID WHERE acUnit.intStatus='0' AND la.intLevelAshID = '".$filter1."' AND acUnit.intUnitStatus = '".$filter2."' ORDER BY acUnit.strUnitName ASC";    
+        
+                                                                $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+                                                                mysql_select_db(constant('mydb'));
+                                                                $result = mysql_query($sql,$conn);
+                                                                
+                                                                while($row = mysql_fetch_array($result))
+                                                                { 
+                                                                    $intUnitID =$row['intUnitID'];
+                                                                    $strUnitName =$row['strUnitName'];
+                                                                    $strLevelName =$row['strLevelName'];
+                                                                    $strAshName =$row['strAshName'];
+                                                                    $intCapacity =$row['intCapacity'];
+                                                                    
+                                                                    $intUnitStatus =$row['intUnitStatus'];
+                                                                    $intStatus=$row['intStatus'];
+                                                                    
+                                                                    if($intUnitStatus==0){
+                                                                        $AshStatus="Available";
+                                                                    }else if($intUnitStatus==1){
+                                                                        $AshStatus="Reserved";
+                                                                    }else{
+                                                                        $AshStatus="Occupied";
+                                                                    }
+                                                                    
+                                                                    echo "<tr>
+                                                                            <td style ='font-size:18px;'>$strUnitName</td>
+                                                                            <td style ='font-size:18px;'>$strLevelName</td>
+                                                                            <td style ='font-size:18px;'>$strAshName</td>
+                                                                            <td align='right'; style ='font-size:18px;'>$intCapacity</td>
+                                                                            <td style ='font-size:18px;'>$AshStatus</td>
+                                                                        </tr>";
+                                                                        
+                                                                    }//while($row = mysql_fetch_array($result))
+                                                                    mysql_close($conn);
+                                                                 
+                                                                    
+                                                              }
+                                                              else if(isset($_POST['btnBack'])){
+                                                                    $view = new ashUnit();
+                                                                    $view->viewAshUnit();
+                                                              }
+                                                              else{
+                                                                    $view1 = new ashUnit();
+                                                                    $view1->viewAshUnit();
+                                                              }
                                                               
                                                              ?>
                                                        
                                                         </tbody>
                                                 </table>
                                             </div><!-- /.table-responsive -->
-                                        
+                                        </div><!--panel body -->
+                                    </div><!--panel panel-success-->
+                                </div><!--col-md-8-->   
+                    
                             </div><!--panel body -->
                         </div><!--panel panel-success-->
                     </div><!--col-md-12-->

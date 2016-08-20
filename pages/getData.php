@@ -10,6 +10,14 @@
         case 'getLot':
             getLot();
             break;
+
+        case 'getLevel':
+            getLevel();
+            break;
+
+        case 'getAsh':
+            getAsh();
+            break;
         
         default:
             # code...
@@ -66,6 +74,64 @@
             //$intStatus = $row['intStatus']; 
 
             echo ",$intLotID,$strLotName,$intLotStatus";
+        }
+        mysql_close($conn);
+    }
+
+    function getLevel() {
+        $intAshID = $_GET['intAshID'];
+        $sql = "Select * from tbllevelash WHERE intStatus = 0 AND intAshID = $intAshID ORDER BY strLevelName DESC";
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+
+        if($row = mysql_fetch_array($result)){
+            $intLevelAshID = $row['intLevelAshID']; 
+            $strLevelName = $row['strLevelName'];
+            $intNoOfUnit = $row['intNoOfUnit'];
+            $dblSellingPrice = $row['dblSellingPrice'];
+            //$intStatus = $row['intStatus']; 
+            echo "$intLevelAshID,$strLevelName,$intNoOfUnit,$dblSellingPrice";
+        }
+
+        while($row = mysql_fetch_array($result)){
+                    
+            $intLevelAshID = $row['intLevelAshID']; 
+            $strLevelName = $row['strLevelName'];
+            $intNoOfUnit = $row['intNoOfUnit'];
+            $dblSellingPrice = $row['dblSellingPrice'];
+            //$intStatus = $row['intStatus']; 
+
+            echo ",$intLevelAshID,$strLevelName,$intNoOfUnit,$dblSellingPrice";
+        }
+        mysql_close($conn);
+    }
+
+    function getAsh() {
+        $intLevelAshID = $_GET['intLevelAshID'];
+        $sql = "Select * from tblacunit WHERE intStatus = 0 AND intLevelAshID = $intLevelAshID ORDER BY strUnitName ASC";
+        $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+        mysql_select_db(constant('mydb'));
+        $result = mysql_query($sql,$conn);
+
+        if($row = mysql_fetch_array($result)){
+            $intUnitID = $row['intUnitID']; 
+            $strUnitName = $row['strUnitName'];
+            $intUnitStatus = $row['intUnitStatus'];
+            $intCapacity = $row['intCapacity'];
+            //$intStatus = $row['intStatus']; 
+            echo "$intUnitID,$strUnitName,$intUnitStatus,$intCapacity";
+        }
+
+        while($row = mysql_fetch_array($result)){
+                    
+            $intUnitID = $row['intUnitID']; 
+            $strUnitName = $row['strUnitName'];
+            $intUnitStatus = $row['intUnitStatus'];
+            $intCapacity = $row['intCapacity'];
+            //$intStatus = $row['intStatus']; 
+
+            echo ",$intUnitID,$strUnitName,$intUnitStatus,$intCapacity";
         }
         mysql_close($conn);
     }

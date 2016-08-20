@@ -1,10 +1,12 @@
 <?php
 
 require ("controller/connection.php");
-require('controller/viewdata.php');
+require('controller/query-viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
+require('controller/archivedata.php');
+require('controller/retrieve.php');
 
 
 
@@ -42,7 +44,7 @@ if (isset($_POST['btnSubmit'])){
 						
                         
 						$createLot =  new createLot();
-                        $createLot->Create($id,$typeBlock,$lotStatus,$tfStatus);
+                        $flag =$createLot->Create($id,$typeBlock,$lotStatus,$tfStatus);
                         
 						if ($n == 9999) { //Once the number reaches 9999, increase the letter by one and reset number to 0.
 							$n = 0;
@@ -52,9 +54,15 @@ if (isset($_POST['btnSubmit'])){
 						
 						$i++; $n++; //Letters can be incremented the same as numbers. Adding 1 to "AAA" prints out "AAB".
 					}
-                    echo "<script>alert('Succesfully created!')</script>";
+                    
+                    if($flag == 1)
+                        echo "<script>alert('Succesfully created!')</script>";
+                    else
+                        echo "<script>alert('Duplicate Data!')</script>";
+                        
+                    }
                 }
-        }
+        
         
     }	
 }
@@ -83,7 +91,15 @@ if (isset($_POST['btnDeactivate']))
 		$deactivateLot =  new deactivateLot();
 		$deactivateLot->deactivate($tfLotID);
       }
-  
+
+if (isset($_POST['btnArchive'])){
+
+        $tfLotID = $_POST['tfLotID'];
+        
+        $archiveLot =  new archiveLot();
+        $archiveLot->archive($tfLotID);
+}
+ 
 ?>
 
 <!DOCTYPE html>
@@ -95,7 +111,7 @@ if (isset($_POST['btnDeactivate']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Lot-Unit</title>
+    <title>MLMS-Lot-Unit-Query</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -147,34 +163,129 @@ if (isset($_POST['btnDeactivate']))
                     <div class="col-md-12">
                         <div class="panel panel-success ">
                             <div class="panel-heading">
-                                <H1><b>LOT UNIT</b></H1>
+                                <H1><b>LOT-UNIT</b></H1>
                             </div><!-- /.panel-heading -->
                                     
                             <div class="panel-body">
-                            
-                               
+                                
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <form class="form-vertical" role="form" action = "lot-query.php" method= "post">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <label class="col-md-2" style = "font-size: 18px;" align="right" style="margin-top:.30em">Filter by:</label>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter1">
+                                                                    <option value=""> --Choose Block (Section)--</option>
+                                                                    <?php
+                                                                       $view = new lot();
+                                                                       $view->selectBlock(); 
+                                                                    ?>>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter2">
+                                                                    <option value=""> --Choose Status--</option>
+                                                                    <option value="0"> Available</option>
+                                                                    <option value="1"> Reserve</option>
+                                                                    <option value="2"> Occupied</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-2">
+                                                                <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                                <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                            </div>
+                                                        </div><!-- FORM GROUP -->
+                                                    
+                                                    </div><!-- ROW -->
+                                                </form>
+                     	                  </div><!-- /.panel-heading -->
+                                           
+                                        <div class="panel-body"> 
                                             <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                                 <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                     <thead>
                                                         <tr>
                                                             <th class = "success" style = "text-align: center; font-size: 18px;">Lot Name</th>
-                                                            <th class = "success" style = "text-align: center; font-size: 18px;">Block Name</th>
+                                                            <th class = "success" style = "text-align: center; font-size: 18px;">Block</th>
                                                             <th class = "success" style = "text-align: center; font-size: 18px;">Lot Type</th>
                                                             <th class = "success" style = "text-align: center; font-size: 18px;">Section Name</th>
                                                             <th class = "success" style = "text-align: center; font-size: 18px;">Lot Status</th>
-                                                           
                                                         </tr>
                                                     </thead>
                                                     
                                                     <tbody>
                                                         <?php
-                                                            $view = new lot();
-                                                            $view->viewLotQuery();
-                                                        ?>
+                                                            
+                                                              if (isset($_POST['btnGo'])){
+                                                                  
+                                                                   $filter1 = $_POST['filter1'];
+                                                                   $filter2 = $_POST['filter2'];
+                                                                  echo"$filter1,$filter2,";
+                                                                    $sql = "Select l.intLotID, l.strLotName, b.strBlockName, t.strTypeName, s.strSectionName, l.intLotStatus, l.intStatus 
+                                                                        FROM tbllot l  
+                                                                            INNER JOIN tblBlock b ON l.intBlockID = b.intBlockID 
+                                                                            INNER JOIN	tbltypeoflot t ON b.intTypeID = t.intTypeID
+                                                                            INNER JOIN tblsection s	ON b.intSectionID = s.intSectionID WHERE l.intStatus = '0'  AND b.intBlockID = '".$filter1."' AND l.intLotStatus = '".$filter2."'
+                                                                            ORDER BY  strLotName ASC";
+
+                                                            $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+                                                            mysql_select_db(constant('mydb'));
+                                                            $result = mysql_query($sql,$conn);
+                                                            
+
+
+                                                            while($row = mysql_fetch_array($result)){ 
+                                                                
+                                                            $intLotID =$row['intLotID'];
+                                                            $strLotName =$row['strLotName'];
+                                                            $strBlockName =$row['strBlockName'];
+                                                            $strTypeName=$row['strTypeName'];
+                                                            $strSectionName =$row['strSectionName'];
+                                                            $intLotStatus =$row['intLotStatus'];
+                                                            $intStatus =$row['intStatus'];
+                                                            
+                                                            if($intLotStatus==0){
+                                                                $LotStatus ="Available";
+                                                            }else if($intLotStatus==1){
+                                                                $LotStatus="Reserved";
+                                                            }else{
+                                                                $LotStatus="Occupied";
+                                                            }
+                                                                        
+                                                            echo 
+                                                                "<tr><td style ='font-size:18px;'>$strLotName</td>
+                                                                    <td style ='font-size:18px;'>$strBlockName</td>
+                                                                    <td style ='font-size:18px;'>$strTypeName</td>
+                                                                    <td style ='font-size:18px;'>$strSectionName</td>
+                                                                    <td style ='font-size:18px;'>$LotStatus</td>
+                                                                </tr>";
+                                                                    
+                                                                }//while($row = mysql_fetch_array($result))
+                                                                mysql_close($conn);
+                                                                    
+                                                              }else if(isset($_POST['btnBack'])){
+                                                                    $view = new lot();
+                                                                    $view->viewLot();
+                                                              }
+                                                              else{
+                                                                  $view1 = new lot();
+                                                                  $view1->viewLot();
+                                                              }
+                                                              
+                                                             ?>
+                                                        
                                                     </tbody>
                                                 </table>
                                             </div><!-- /.table-responsive -->
-                                    
+                                        </div><!--panel body -->
+                                    </div><!--panel panel-success-->
+                                </div><!--col-md-8-->   
+                    
                             </div><!--panel body -->
                         </div><!--panel panel-success-->
                     </div><!--col-md-12-->

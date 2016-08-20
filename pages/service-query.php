@@ -1,7 +1,7 @@
 <?php
 
 require ("controller/connection.php");
-require('controller/viewdata.php');
+require('controller/query-viewdata.php');
 require('controller/createdata.php');
 require('controller/updatedata.php');
 require('controller/deactivate.php');
@@ -12,22 +12,24 @@ require('controller/retrieve.php');
 if (isset($_POST['btnSubmit'])){
 
     $tfServiceName = $_POST['tfServiceName'];
+    $serviceType = $_POST['serviceType'];
     $tfServicePrice= $_POST['tfServicePrice'];
     $tfStatus=$_POST['tfStatus'];
     
     $createService =  new createService();
-    $createService->Create($tfServiceName,$tfServicePrice,$tfStatus);
+    $createService->Create($tfServiceName,$serviceType,$tfServicePrice,$tfStatus);
 }
     
 if (isset($_POST['btnSave'])){
 
     $tfServiceID = $_POST['tfServiceID'];
     $tfServiceName = $_POST['tfServiceName'];
+    $serviceType = $_POST['serviceType'];
     $tfServicePrice = $_POST['tfServicePrice'];
     
     
     $updateservice =  new updateService();
-    $updateservice->update($tfServiceID,$tfServiceName,$tfServicePrice);
+    $updateservice->update($tfServiceID,$serviceType,$tfServiceName,$tfServicePrice);
 }
 
      
@@ -60,7 +62,7 @@ if (isset($_POST['btnArchive'])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MLMS-Service</title>
+    <title>MLMS-Service-Query</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -115,12 +117,44 @@ if (isset($_POST['btnArchive'])){
                      
                             <div class="panel-body">
                                 
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <form class="form-vertical" role="form" action = "service-query.php" method= "post">
+                                            
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <label class="col-md-2" style = "font-size: 18px;" align="right" style="margin-top:.30em">Filter by:</label>
+                                                            <div class="col-md-4">
+                                                                <select class="form-control" name = "filter">
+                                                                    <option value=""> --Choose Service Type--</option>
+                                                                    <option value="0"> Service Request</option>
+                                                                    <option value="1"> Service Scheduling</option>
+                                                                                                        
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-2">
+                                                                <button type="submit" class="btn btn-success pull-left" name= "btnGo">Go</button>
+                                                                <button type="submit" class="btn btn-default pull-left" name= "btnBack">Back</button>
+                                                                <!--<a type="button" class="btn btn-default pull-left" name= "btnPrint" href="pdfService.php" target="_blank">Print</a>-->
+                                                                
+                                                            </div>
+                                                        </div><!-- FORM GROUP -->
+                                                    </div><!-- ROW -->
+                                                
+                                            </form>
+                                                                               
+                     	                  </div><!-- /.panel-heading -->
+                                           
+                                    <div class="panel-body">
                                         <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
                                             <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                                     <thead>
                                                             <tr>
                                                                 
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Service</th>
+                                                                <th class = "success" style = "text-align: center; font-size: 20px;">Service Type</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Price</th>
                                                                 
                                                             </tr>
@@ -129,16 +163,57 @@ if (isset($_POST['btnArchive'])){
                                                         <tbody>
                                                             <?php
                                                             
-                                                             
-                                                                    $view1 = new service();
-                                                                    $view1->viewServiceQuery();
-                                                                                                                            
+                                                              if (isset($_POST['btnGo'])){
+                                                                  
+                                                                  $filter = $_POST['filter'];
+                                                              
+                                                                  $sql = "SELECT * FROM tblservice WHERE intStatus='0' AND intServiceType='".$filter."' ORDER BY strServiceName ASC";
+        
+                                                                  $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
+                                                                  mysql_select_db(constant('mydb'));
+                                                                  $result = mysql_query($sql,$conn);
+                                                                
+
+                                                                  while($row = mysql_fetch_array($result)){
+                                                                    
+                                                                    $intServiceID = $row['intServiceID'];
+                                                                    $strServiceName = $row['strServiceName'];
+                                                                    $intServiceType = $row['intServiceType'];
+                                                                    $dblServicePrice = $row['dblServicePrice'];
+                                                                    
+                                                                    if($intServiceType==0){
+                                                                            $serviceType="Service Request";
+                                                                    }else
+                                                                            $serviceType="Service Scheduling";
+                                                                    
+                                                                    
+                                                                    echo "<tr>
+                                                                                <td style ='font-size:18px;'>$strServiceName</td>
+                                                                                <td style ='font-size:18px;'>$serviceType</td>
+                                                                                <td style = 'text-align: right; font-size:18px;'>₱ ".number_format($dblServicePrice,2)."</td>
+                                                                            </tr>";
+                                                                        
+                                                                }//while($row = mysql_fetch_array($result))
+                                                                mysql_close($conn);
+                                                                
+                                                                }else if(isset($_POST['btnBack'])){
+                                                                    $view = new service();
+                                                                    $view->viewService();
+                                                                }
+                                                                else{
+                                                                        $view1 = new service();
+                                                                        $view1->viewService();
+                                                                }
+                                                                
                                                              ?>
                                                             
                                                         </tbody>
                                                 </table>
                                             </div><!-- /.table-responsive -->
-                                    
+                                        </div><!--panel body -->
+                                    </div><!--panel panel-success-->
+                                </div><!--col-md-8-->   
+                    
                             </div><!--panel body -->
                         </div><!--panel panel-success-->
                     </div><!--col-md-12-->
